@@ -27,9 +27,7 @@ const userSchema = new mongoose.Schema({
         default: true
     }
 })
-// mongodb+srv://raziel:<password>@cluster0.8bz3lxr.mongodb.net/?retryWrites=true&w=majority
 
 const userModel = mongoose.model('user', userSchema)
 module.exports = userModel
 
-// mongodb+srv://raziel:<password>@cluster0.8bz3lxr.mongodb.net/
