@@ -1,11 +1,11 @@
-const userModel = require("./user.model");
+const userModel = require("../dal/user.model");
 
 async function create(data) {
   return userModel.create(data);
 }
 
-async function read(filter) {
-  return await userModel.find(...filter, { isActive: true });
+async function read() {
+  return await userModel.find({ isActive: true });
 }
 
 async function readOne(filter) {
@@ -13,11 +13,11 @@ async function readOne(filter) {
 }
 
 async function update(filter, data) {
-  return await userModel.update(filter, data);
+  return await userModel.update({...filter, isActive: true}, data);
 }
 
 async function updateMany(filter, data) {
-  return await userModel.updateMany(filter, data);
+  return await userModel.updateMany({...filter, isActive: true}, data);
 }
 
 async function delMany(filter) {
@@ -25,7 +25,7 @@ async function delMany(filter) {
 }
 
 async function delOne(filter) {
-  return await userModel.deleteOne(filter, { isActive: false });
+  return await userModel.updateOne(filter, { isActive: false });
 }
 
 

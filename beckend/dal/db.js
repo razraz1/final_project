@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 
-const URL_MONGO = "mongodb+srv://raziel:1234@cluster0.8bz3lxr.mongodb.net/EmailUsers?retryWrites=true&w=majority"
+const MONGO_URL = process.env.URL_MONGO
 
 const connect = ()=>{
-    mongoose.connect(URL_MONGO) 
+    mongoose.connect(MONGO_URL) 
     .then(_=> console.log("connection to DB - success"))
     .catch(err => {
         console.err("DB connect error: ", err);
