@@ -5,10 +5,12 @@ const db = require('./dal/db')
 db.connect()
 
 app.use(express.json())
-const cors = require('cors')
+const cors = require('cors') 
 app.use(cors())
 
 
+const userRouter = require('./router/user.router')
+app.use('/users', userRouter)
 
 
 app.listen(3000 , ()=>{
