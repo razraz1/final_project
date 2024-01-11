@@ -1,22 +1,35 @@
 const userController = require('../dal/user.controller')
+// const { emit } = require('../dal/user.model')
 
 
-// const userModel = require('../dal/user.model')
-
-
-//SHOW ALL
-// async function read() {
-//     return await userModel.find({ isActive: true })
-// }
-
-
-async function getAllUser(){
+//SHOW ALL USERS
+async function getAllUser() {
     return await userController.read()
 }
 
 
-async function updateUser (){
+//SHOW ONE BY EMAIL
+async function getUserByEmail(email) {
+    const userEmail = await userController.readOne({ email:email })
+    if (!userEmail) throw "User not exist"
+    return userEmail
+}
 
+
+//UPDATE USER
+async function updateUser(userEmail, data) {
+    const exist = await userController.readOne({ email: userEmail })
+    if (!exist) throw "User not exist"
+
+    let dataOfUserToUpdate = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        password: data.password,
+        profilePic: data.profilePic
+    }
+    await userController.update({ email: userEmail }, dataOfUserToUpdate)
+
+    return await userController.readOne({ email: userEmail })
 }
 
 
@@ -24,5 +37,7 @@ async function updateUser (){
 
 
 module.exports = {
-    getAllUser
+    getAllUser,
+    getUserByEmail,
+    updateUser,
 }
