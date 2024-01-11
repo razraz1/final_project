@@ -26,7 +26,7 @@ router.get('/:userEmail', async (req, res) => {
 
 
 //UPDATE USER
-router.put('/update/:userEmail', async (req, res) => {
+router.put('/:userEmail', async (req, res) => {
     try {
         const updateMe = await userServes.updateUser(req.params.userEmail, req.body)
         res.send(updateMe)
@@ -43,6 +43,56 @@ router.post('/', async (req, res)=>{
     try{
         const addNew = await userServes.addNewUser(req.body)
         res.send(addNew)
+    }
+    catch(err){
+        res.status(400).send(err)
+    }
+})
+
+
+
+//USER PERMISSION
+//VALIDATION
+async function authentication(req, res, next){
+    const {auth}= req.headers;
+    if(!auth){
+        res.status(400).send("headers not correct")
+        return
+    }
+    const [email, password] = auth.split(":")
+    if(!email || !password){
+        res.status(400).send("email or password not correct")
+        return
+    }
+    try{
+        const userEP = await userServes.getUserByEmailAndPassword(email, password)
+        if(!userEP){
+            res.status(401).send("user not exist");
+            return;
+        }
+        req.user = userEP;
+        next()
+    }
+    catch (err) {
+        res.status(500).send("server problem");
+    }
+}
+//DELETE PERMISSION
+async function authorization(req, res, next){
+    if(req.params.userEmail !== req.user.email){
+        res.status(401).send("email not mach");
+        return;
+    }
+    next()
+}
+
+
+//DELETE USER
+router.delete('/:userEmail', authentication, authorization, async (req, res)=>{
+    console.log(req.params);
+    try{
+        const delUser = await userServes.deleteUser(req.params.userEmail)
+        res.status(200).send(delUser)
     }
     catch(err){
         res.status(400).send(err)

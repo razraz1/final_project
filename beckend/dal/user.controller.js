@@ -24,11 +24,11 @@ async function updateMany(filter, data) {
 }
 
 async function delMany(filter) {
-  return await userModel.updateMany(filter, { isActive: false });
+  return await userModel.updateMany({...filter,  isActive: false });
 }
 
 async function delOne(filter) {
-  return await userModel.updateOne(filter, { isActive: false });
+  return await userModel.updateOne(filter, {isActive: false });
 }
 
 
