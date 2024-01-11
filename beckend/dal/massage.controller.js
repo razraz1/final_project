@@ -1,4 +1,4 @@
-const userModel = require("../dal/user.model");
+const massageModel = require("../dal/user.model");
 
 async function create(data) {
   return userModel.create(data);

@@ -29,4 +29,4 @@ const massageSchema = new mongoose.Schema({
 })
 
 const massageModel = mongoose.model('massage', massageSchema)
-module.exports = userModel
+module.exports = massageModel
