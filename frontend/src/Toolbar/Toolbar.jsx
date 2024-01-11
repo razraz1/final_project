@@ -5,10 +5,10 @@ import styles from './style.module.css'
 export default function Toolbar() {
   return (
     <div className={styles.toolbar}>
-      {/* <button className={styles.toolbar}></button>
+      <button className={styles.newEmail}>New email</button>
+      <button className={styles.inbox}>Inbox</button>
       <button className={styles.toolbar}></button>
       <button className={styles.toolbar}></button>
-      <button className={styles.toolbar}></button> */}
     </div>
   )
 }
