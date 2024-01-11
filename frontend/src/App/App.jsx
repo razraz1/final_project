@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import styles from './style.module.css'
 import Header from '../Header/Header'
-import Editing from '../Editing/Editing'
+
+
+import Content from '../Content/Content'
 import ProfileImgContext from '../context/ProfileImgContext'
 
 
@@ -13,7 +15,8 @@ export default function App() {
     <>
       <ProfileImgContext.Provider value={{profileImg, setProfileImg}}>
         <Header />
-        <Editing />
+        <Content />
+    
       </ProfileImgContext.Provider>
     </>
   )
