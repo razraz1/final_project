@@ -1,0 +1,16 @@
+*  {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+
+.toolbar{
+    width: 15vw;
+    height: 85vh;
+    /* background-color: rgb(242, 250, 252); */
+
+    position: sticky;
+    top: 15vh;
+
+}
