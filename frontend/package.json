@@ -1,9 +1,7 @@
 {
-<<<<<<< HEAD
-  "name": "final-project",
-=======
+
   "name": "frontend",
->>>>>>> 1ec77996f374a802f30b2497645ff280a16623d3
+
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -15,7 +13,6 @@
   },
   "dependencies": {
     "react": "^18.2.0",
-<<<<<<< HEAD
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.0"
   },
@@ -27,19 +24,8 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
-    "vite": "^5.0.8"
-=======
+    "vite": "^5.0.8",
+
     "react-dom": "^18.2.0"
-  },
-  "devDependencies": {
-    "@types/react": "^18.2.37",
-    "@types/react-dom": "^18.2.15",
-    "@vitejs/plugin-react": "^4.2.0",
-    "eslint": "^8.53.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.4",
-    "vite": "^5.0.0"
->>>>>>> 1ec77996f374a802f30b2497645ff280a16623d3
   }
 }
