@@ -15,7 +15,7 @@ export default function App() {
     <>
       <ProfileImgContext.Provider value={{profileImg, setProfileImg}}>
         <Header />
-        <Content />
+        <Content /> 
     
       </ProfileImgContext.Provider>
     </>

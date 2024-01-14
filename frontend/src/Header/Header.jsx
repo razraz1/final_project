@@ -40,7 +40,7 @@ const firstName = "moshe"
                 <SlMagnifier />
  
             </div>
-            <div className={styles.imgchat}>
+            <div className={styles.imgChat}>
                 <img src="https://cdn.pixabay.com/photo/2013/07/12/15/53/email-150497_640.png"/>
             </div>
         </div>

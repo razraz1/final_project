@@ -4,10 +4,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-
+    
 }
 
-.inbox {
+.outbox {
     width: 85vw;
     /* height: 85vh; */
     background-color: rgb(237, 237, 250);
@@ -18,12 +18,12 @@
 
 }
 
-.inbox table {
+.outbox table {
     display: flex;
     flex-direction: column;
 }
 
-.inbox table tr {
+.outbox table tr {
     display: flex;
     justify-content: space-around;
     border-top: 1px solid rgb(242, 250, 252);
@@ -32,51 +32,51 @@
     padding-top: 10px;
 }
 
-.inbox table tr:hover {
+.outbox table tr:hover {
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
-.inbox table tr td {
+.outbox table tr td {
     height: 50px;
     
     
 }
 
-.inbox table tr .name {
+.outbox table tr .name {
     width: 10vw;
     font-size: 2rem;
     
 }
 
-.inbox table tr .title {
+.outbox table tr .title {
     width: 40vw;
     font-size: 2rem;
     overflow: hidden;
 
 }
 
-.inbox table tr .trash {
+.outbox table tr .trash {
     font-size: 2rem;
     width: 5vw;
 
 }
 
-.inbox table tr .date {
+.outbox table tr .date {
     width: 10vw;
     font-size: 1.5rem;
 
 }
 
 @media (width < 1200px) {
-    .inbox table tr .date {
+    .outbox table tr .date {
         width: 18vw;
     }
 
-    .inbox table tr .name {
+    .outbox table tr .name {
         width: 8vw;
     }
 
-    .inbox table tr .trash {
+    .outbox table tr .trash {
         width: 3vw;
 
     }
@@ -84,13 +84,13 @@
 }
 
 @media (width < 1000px) {
-    .inbox table tr .title,
-    .inbox table tr .name,
-    .inbox table tr .trash {
+    .outbox table tr .title,
+    .outbox table tr .name,
+    .outbox table tr .trash {
         font-size: 1.4rem;
     }
 
-    .inbox table tr .date {
+    .outbox table tr .date {
         display: none;
     }
 
