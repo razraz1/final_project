@@ -13,6 +13,9 @@ app.use(cors())
 const userRouter = require('./router/user.router')
 app.use('/users', userRouter)
 
+const massageRouter = require('./router/massage.router');
+app.use('/massages', massageRouter)
+
 
 app.listen(3000 , ()=>{
     console.log('*** server is UP ***\nPort: 3000');

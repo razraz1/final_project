@@ -24,7 +24,7 @@ async function updateMany(filter, data) {
 }
 
 async function delMany(filter) {
-  return await massageModel.updateMany({...filter,  isActive: false });
+  return await massageModel.updateMany(filter,{ isActive: false });
 }
 
 async function delOne(filter) {

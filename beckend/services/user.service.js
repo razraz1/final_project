@@ -87,7 +87,7 @@ async function deleteUser(email){
 
 async function addUser(user) {
   const exist = await userController.readOne(user);
-  if (exist) throw "user is exist";
+  if (exist) throw "User is exist already";
 
   let errorList = await areFieldsFull(user);
   errorList = errorList.concat(await detailsValidation(user)) 
@@ -99,9 +99,7 @@ async function addUser(user) {
     email: user.email,
     password: user.password
   }
-
-
-
+  
   return await userController.create(newUser);
 }
 
