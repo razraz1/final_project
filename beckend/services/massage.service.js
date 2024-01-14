@@ -14,6 +14,12 @@ async function deleteOneMassage(id){
 }
 
 
+// send massage
+async function sendMassage(massage){
+    
+    return await massageController.create(massage)
+}
+
 
 module.exports = {
     getAllMassage,
