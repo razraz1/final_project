@@ -5,8 +5,13 @@ async function create(data) {
 }
 
 //SHOW ALL
-async function read() {
-  return await massageModel.find({ isActive: true });
+async function read(filter) {
+  return await massageModel.find({...filter, isActive: true });
+}
+
+
+async function readTrash(filter) {
+  return await massageModel.find({...filter, isActive: false });
 }
 
 //SHOW ONE
@@ -39,5 +44,6 @@ module.exports = {
   update,
   updateMany,
   delOne,
-  delMany
+  delMany,
+  readTrash
 }
