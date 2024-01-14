@@ -12,9 +12,9 @@ export default function Content() {
     return (
         <div className={styles.content}>
             <Toolbar />
-            {/* <Inbox /> */}
+            <Inbox />
             {/* <Editing /> */}
-            <Outbox />
+            {/* <Outbox /> */}
         </div>
     )
 }

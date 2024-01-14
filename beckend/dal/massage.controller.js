@@ -9,6 +9,11 @@ async function read(filter) {
   return await massageModel.find({...filter, isActive: true });
 }
 
+
+async function readTrash(filter) {
+  return await massageModel.find({...filter, isActive: false });
+}
+
 //SHOW ONE
 async function readOne(filter) {
   return await massageModel.findOne({ ...filter, isActive: true });
@@ -39,5 +44,6 @@ module.exports = {
   update,
   updateMany,
   delOne,
-  delMany
+  delMany,
+  readTrash
 }
