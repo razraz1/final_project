@@ -3,16 +3,27 @@ const massageService = require("../services/massage.service");
 const router = express.Router();
 
 //GET ALL USER MASSAGE
-router.get("/:userEmail", async (req, res) => {
-  try {
-    const data = await massageService.getAllMassagesOfUser(
-      req.params.userEmail
-    );
-    res.send(data);
-  } catch (err) {
-    res.status(400).send(err);
-  }
-});
+router.get('/:userEmail', async (req, res) => {
+    try {
+        const data = await massageService.getAllMyInboxEmail(req.params.userEmail)
+        res.send(data)
+    }
+    catch (err) {
+        res.status(400).send(err)
+    }
+})
+router.get('/to/:userEmail', async (req, res) => {
+    try {
+        const data = await massageService.getAllMyOutboxEmail(req.params.userEmail)
+        console.log(data);
+        res.send(data)
+    }
+    catch (err) {
+        res.status(400).send(err)
+    }
+})
+
+
 
 //trash mail
 router.get("/trashMail/:userEmail", async (req, res) => {
