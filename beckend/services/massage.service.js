@@ -21,6 +21,12 @@ async function deleteOneMassageById(id){
 }
 
 
+// send massage
+async function sendMassage(massage){
+    
+    return await massageController.create(massage)
+}
+
 
 module.exports = {
     getAllMyInboxEmail,

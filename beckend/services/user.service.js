@@ -97,7 +97,8 @@ async function addUser(user) {
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
-    password: user.password
+    password: user.password,
+    profilePic: user.profilePic
   }
   
   return await userController.create(newUser);
