@@ -11,7 +11,7 @@ async function read() {
 
 //SHOW ONE
 async function readOne(filter) {
-  return await userModel.findOne({ ...filter, isActive: true });
+  return await userModel.findOne({...filter,  isActive: true });
 }
 
 //UPDATE

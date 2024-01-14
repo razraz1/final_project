@@ -5,13 +5,17 @@ const massageSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    to: [{
+    to: {
+        type:[String],
+        require: true
+    },
+    title:{
         type: String,
         require: true
-    }],
-    massage:{
-        type:String,
-        require:true
+    },
+    massageBody: {
+        type: String,
+        require: true
     },
     createDate: {
         type: Date,
