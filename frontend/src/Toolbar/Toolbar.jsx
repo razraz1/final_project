@@ -10,20 +10,20 @@ export default function   Toolbar() {
   return (
     <div className={styles.toolbar}>
       <button className={styles.newEmail}>
-        <spen><IoPencil /></spen>
-        <spen className={styles.toolbarBut}>new email</spen>
+        <span><IoPencil /></span>
+        <span className={styles.toolbarBut}>new email</span>
       </button>
       <button className={styles.inbox}>
-        <spen><MdInbox /></spen>
-        <spen className={styles.toolbarBut}>inbox</spen>
+        <span><MdInbox /></span>
+        <span className={styles.toolbarBut}>inbox</span>
       </button>
       <button className={styles.sent}>
-        <spen><VscSend /></spen>
-        <spen className={styles.toolbarBut}>outbox</spen>
+        <span><VscSend /></span>
+        <span className={styles.toolbarBut}>outbox</span>
       </button>
       <button className={styles.trash}>
-        <spen><LuTrash2 /></spen>
-        <spen className={styles.toolbarBut}>trash</spen>
+        <span><LuTrash2 /></span>
+        <span className={styles.toolbarBut}>trash</span>
       </button>
     </div>
   )
