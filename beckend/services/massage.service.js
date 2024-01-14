@@ -13,6 +13,12 @@ async function getAllMyOutboxEmail(email){
 }
 
 
+//SHOW ONE BY EMAIL OR PASSWORD
+async function getUserByEmailAndPassword(email, password) {
+    const userN = await userController.readOne({ email: email, password: password })
+    return userN
+}
+
 //DELETE MASSAGE
 async function deleteOneMassageById(id){
     // const exist = await massageController.readOne({_id: id})
@@ -31,5 +37,6 @@ async function sendMassage(massage){
 module.exports = {
     getAllMyInboxEmail,
     getAllMyOutboxEmail,
-    deleteOneMassageById
+    deleteOneMassageById,
+    getUserByEmailAndPassword
 }
