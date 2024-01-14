@@ -6,13 +6,25 @@ const router = express.Router();
 //GET ALL USER MASSAGE
 router.get('/:userEmail', async (req, res) => {
     try {
-        const data = await massageService.getAllMassagesOfUser(req.params.userEmail)
+        const data = await massageService.getAllMyInboxEmail(req.params.userEmail)
         res.send(data)
     }
     catch (err) {
         res.status(400).send(err)
     }
 })
+router.get('/to/:userEmail', async (req, res) => {
+    try {
+        const data = await massageService.getAllMyOutboxEmail(req.params.userEmail)
+        console.log(data);
+        res.send(data)
+    }
+    catch (err) {
+        res.status(400).send(err)
+    }
+})
+
+
 
 //DELETE MASSAGE 
 router.delete('/:id', async (req, res) => {

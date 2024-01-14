@@ -1,9 +1,14 @@
 const massageController = require('../dal/massage.controller')
 
 //GET ALL MASSAGE
-async function getAllMassagesOfUser(email){
-    const myEmailHistory =  await massageController.readOne({from: email})
+async function getAllMyInboxEmail(email){
+    const myEmailHistory =  await massageController.read({from: email})
     if(!myEmailHistory) throw "No massage"
+    return myEmailHistory
+}
+async function getAllMyOutboxEmail(email){
+    const myEmailHistory =  await massageController.read({to: email})
+    if(!myEmailHistory) throw "No out massage"
     return myEmailHistory
 }
 
@@ -24,6 +29,7 @@ async function sendMassage(massage){
 
 
 module.exports = {
-    getAllMassagesOfUser,
+    getAllMyInboxEmail,
+    getAllMyOutboxEmail,
     deleteOneMassageById
 }
