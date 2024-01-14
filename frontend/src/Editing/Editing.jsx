@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import styles from './style.module.css'
 import { CgProfile } from "react-icons/cg";
+import { IoPencil } from 'react-icons/io5';
 
 import ProfileImgContext from '../context/ProfileImgContext'
 
@@ -23,6 +24,9 @@ export default function Editing() {
             <CgProfile />
           </div>
         )}
+        <div className={styles.icon}>
+          <IoPencil />
+        </div>
       </div>
       <input type="text" name='firstName' defaultValue="firstName" />
       <input type="text" name='lastName' defaultValue="lastName" />

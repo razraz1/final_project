@@ -8,7 +8,7 @@
 .header {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     font-family: 'Poppins', sans-serif;
     align-items: center;
     padding: 7px;
@@ -62,4 +62,12 @@
     width: 70px;
     padding-right: 5px;
     border-radius: 100%;
+}
+
+@media (width < 900px) {
+    .header input {
+        
+        width: 45vw;
+    }
+    
 }

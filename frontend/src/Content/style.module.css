@@ -8,5 +8,7 @@
 .content{
     display: flex;
     background-color: rgb(242, 250, 252);
+    padding-left: 25px;
+    padding-right: 25px;
 
 }

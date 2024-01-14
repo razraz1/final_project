@@ -9,8 +9,46 @@
     width: 15vw;
     height: 85vh;
     /* background-color: rgb(242, 250, 252); */
-
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
     position: sticky;
+    align-items: center;
     top: 15vh;
+    
+}
+.toolbar button{
+    width: 13vw;
+    height: 50px;
+    border-radius: 100px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.4rem;
+    background-color: rgb(242, 250, 252);
+    border: 0;
+}
+.toolbar button:hover{
+    background-color: rgb(237, 237, 250);
+    
+}
+
+
+.toolbar .newEmail  {
+    background-color: rgb(237, 237, 250);
+    /* width: 8vh; */
+    height: 60px;
+    border-radius: 10px;
+}
+
+
+@media (width < 900px) {
+    .toolbar button .toolbarBut{ 
+        display: none;
+    }
+    .toolbar button spen {
+        /* font-size:  1.7rem ; */
+
+    } 
 
 }
