@@ -3,13 +3,13 @@ const massageController = require("../dal/massage.controller");
 //GET ALL MASSAGE
 
 
-async function getAllMyInboxEmail(email){
+async function getAllMyOutboxEmail(email){
     const myEmailHistory =  await massageController.read({from: email})
     if(!myEmailHistory) throw "No massage"
     return myEmailHistory
 
 }
-async function getAllMyOutboxEmail(email){
+async function getAllMyInboxEmail(email){
     const myEmailHistory =  await massageController.read({to: email})
     if(!myEmailHistory) throw "No out massage"
     return myEmailHistory
@@ -30,12 +30,12 @@ async function deleteOneMassageById(id) {
 }
 
 
-//trash mail
+//TRASH EMAIL
 async function getTrashMail(userEmail){
     return await massageController.readTrash({ to: userEmail })
 }
 
-// send massage
+//SEND MASSAGE
 async function sendMassage(massage) {
   let errorList = await areFieldsFull(massage);
   errorList = errorList.concat(await detailsValidation(massage));
