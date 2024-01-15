@@ -60,7 +60,18 @@ router.get('/to/:userEmail', async (req, res) => {
 //     next()
 //   }
 
-//trash mail
+
+//DELETE MASSAGE
+router.delete("/:id", async (req, res) => {
+    try {
+        const delMassage = await massageService.deleteOneMassageById(req.params.id);
+        res.status(200).send(delMassage);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+});
+
+//TRASH EMAIL
 router.get("/trashMail/:userEmail", async (req, res) => {
   try {
     const massages = await massageService.getTrashMail(
@@ -72,17 +83,8 @@ router.get("/trashMail/:userEmail", async (req, res) => {
   }
 });
 
-//DELETE MASSAGE
-router.delete("/:id", async (req, res) => {
-  try {
-    const delMassage = await massageService.deleteOneMassageById(req.params.id);
-    res.status(200).send(delMassage);
-  } catch (err) {
-    res.status(400).send(err);
-  }
-});
 
-//send massage
+//SEND MASSAGE
 router.post("/:userEmail", async (req, res) => {
   try {
     const newMassage = await massageService.sendMassage(req.body);

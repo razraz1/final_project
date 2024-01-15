@@ -30,12 +30,12 @@ async function deleteOneMassageById(id) {
 }
 
 
-//trash mail
+//TRASH EMAIL
 async function getTrashMail(userEmail){
     return await massageController.readTrash({ to: userEmail })
 }
 
-// send massage
+//SEND MASSAGE
 async function sendMassage(massage) {
   let errorList = await areFieldsFull(massage);
   errorList = errorList.concat(await detailsValidation(massage));
