@@ -3,7 +3,7 @@ const massageService = require("../services/massage.service");
 const router = express.Router();
 
 //GET ALL USER MASSAGE
-//INBOX EMAIL
+//OUTBOX EMAIL
 router.get('/:userEmail', async (req, res) => {
     try {
         const data = await massageService.getAllMyInboxEmail(req.params.userEmail)
@@ -13,7 +13,7 @@ router.get('/:userEmail', async (req, res) => {
         res.status(400).send(err)
     }
 })
-//OUTBOX EMAIL
+//INBOX EMAIL
 router.get('/to/:userEmail', async (req, res) => {
     try {
         const data = await massageService.getAllMyOutboxEmail(req.params.userEmail)
