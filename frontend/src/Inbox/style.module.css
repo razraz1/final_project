@@ -45,6 +45,8 @@
 .inbox table tr .name {
     width: 10vw;
     font-size: 2rem;
+    overflow: hidden;
+
     
 }
 
@@ -64,6 +66,7 @@
 .inbox table tr .date {
     width: 10vw;
     font-size: 1.5rem;
+    overflow: hidden;
 
 }
 

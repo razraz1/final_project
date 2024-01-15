@@ -4,6 +4,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    text-decoration: none; 
 }
 .header {
     display: flex;
@@ -18,16 +19,17 @@
     top: 0;
 }
 
-.header > .profilePictures {
+.header  .profilePictures {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     border: 0;
     background-color: rgb(242, 250, 252);
+    
 }
 
-.header > .profilePictures img{
+.header  .profilePictures img{
     height: 50px;
     border-radius: 100px;
     
@@ -39,6 +41,7 @@
 
 .header .name {
     font-size: 1rem;
+
 }
 
 /* .header .input {
