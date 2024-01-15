@@ -8,12 +8,20 @@ export default function Inbox() {
   const [emails, setEmails] = useState([]);
 
   useEffect(() => {
-    const userEmail = "emily.davis@gmail.com";
+    const userEmail = "mifchael.clark@example.com";
     axios.get(`http://localhost:3000/massages/to/` + userEmail).then((res) => {
       setEmails(res.data);
+      console.log(res.data);
     });
   }, []);
-
+  const deletion = (massagesId) => {
+    // const massagesId = "65a523216a96d906a29117f3"
+    axios.delete(`http://localhost:3000/massages/` + massagesId).then((res) => {
+      console.log(res);
+      // setEmails(res.data);
+    });
+  }
+ 
   return (
     <div className={styles.inbox}>
       <table>
@@ -27,7 +35,7 @@ export default function Inbox() {
               <tr key={email._id}>
                 <td className={styles.name}> {email.from} </td>
                 <td className={styles.title}> {email.title} </td>
-                <td className={styles.trash}> {<BsTrash3 />} </td>
+                <td className={styles.trash} onClick={deletion(email._id)}> {<BsTrash3 />} </td>
                 <td className={styles.date}> {email.createDate} </td>
               </tr>
             ))
