@@ -34,6 +34,8 @@ router.get("/user", userServes.authentication, async (req, res) => {
   }
 });
 
+
+
 //UPDATE USER
 router.put("/user", userServes.authentication, async (req, res) => {
   try {

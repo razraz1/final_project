@@ -5,11 +5,15 @@ const massageSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    fromIsActive:{
+        type:Boolean,
+        default:true
+    },
     to: {
-        type:[String],
+        type: [String],
         require: true
     },
-    title:{
+    title: {
         type: String,
         require: true
     },
@@ -21,16 +25,37 @@ const massageSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    status: {
-        type: String,
-        require: true,
-        default: false
-    },
-    isActive: {
-        type: Boolean,
-        default: true
-    }
+    status: [
+        {
+            to: String,
+            isRead: {
+                type: Boolean,
+                default: false
+            }
+        }
+    ],
+    isActive: [
+        {
+            to: String,
+            active: {
+                type: Boolean,
+                default: true
+            }
+        }
+    ]
 })
+
+massageSchema.pre('save', function (next) {
+    const message = this;
+
+    // Populate status and isActive arrays based on the to array
+    message.to.forEach((recipient) => {
+        message.status.push({ to: recipient });
+        message.isActive.push({ to: recipient });
+    });
+
+    next();
+});
 
 const massageModel = mongoose.model('massage', massageSchema)
 module.exports = massageModel

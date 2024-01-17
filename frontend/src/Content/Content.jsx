@@ -11,16 +11,18 @@ import { IoCloseSharp } from "react-icons/io5";
 
 // import Editing from '../Editing/Editing'
 
-export default function Content() {
+export default function Content({data}) {
+
   const { newEmail, setNewEmail } = useContext(NewEmailOpenContext);
   return (
     <div className={styles.content}>
       <Toolbar />
       <Routes>
         <Route path="/inbox" element={<Inbox />} />
-        <Route path="/*" element={<Inbox />} />
+        <Route index element={<Inbox />} />
         <Route path="/editing" element={<Editing />} />
         <Route path="/outbox" element={<Outbox />} />
+        {/* <Route path="/search" element={<Search />} /> */}
       </Routes>
       {newEmail && (
         <div className={styles.newEmail}>
