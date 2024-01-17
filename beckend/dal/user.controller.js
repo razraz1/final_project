@@ -1,5 +1,6 @@
 const userModel = require("../dal/user.model");
 
+//CREATE
 async function create(data) {
   return userModel.create(data);
 }
@@ -11,7 +12,7 @@ async function read() {
 
 //SHOW ONE
 async function readOne(filter) {
-  return await userModel.findOne({...filter,  isActive: true });
+  return await userModel.findOne({ ...filter, isActive: true });
 }
 
 //UPDATE
@@ -19,18 +20,20 @@ async function update(filter, data) {
   return await userModel.updateOne({ ...filter, isActive: true }, data);
 }
 
+//UPDATE MANY
 async function updateMany(filter, data) {
   return await userModel.updateMany({ ...filter, isActive: true }, data);
 }
 
+//DELETE MANY
 async function delMany(filter) {
-  return await userModel.updateMany({...filter,  isActive: false });
+  return await userModel.updateMany({ ...filter, isActive: false });
 }
 
+//DELETE ONE
 async function delOne(filter) {
-  return await userModel.updateOne(filter, {isActive: false });
+  return await userModel.updateOne(filter, { isActive: false });
 }
-
 
 module.exports = {
   create,
@@ -39,5 +42,5 @@ module.exports = {
   update,
   updateMany,
   delOne,
-  delMany
-}
+  delMany,
+};

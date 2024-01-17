@@ -1,107 +1,107 @@
-const userController = require('../dal/user.controller')
-// const { emit } = require('../dal/user.model')
+const userController = require("../dal/user.controller");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken")
+//LOGIN
+async function validateUser(user) {
+  let errors = [];
+  if (!user.email) errors.push("invalid email");
+  if (!user.password) errors.push("invalid password");
+  return errors;
+}
+
+async function authenticateUser(user) {
+  const logedUser = await getUserByEmail(user.email);
+  const match = await bcrypt.compare(user.password, logedUser.password);
+  console.log(match);
+  if (!match) throw "user is not exist";
+
+ const token = jwt.sign({id: logedUser. _id} ,process.env.TOKEN_SECRET)
+ return token
+}
+
+
+async function authentication(req, res, next){
+  const auth =  req.headers.authorization;
+  if (!auth)
+      throw "error"
+    const token = auth.split(" ")[1];
+    if (!token)
+    throw "error"
+  const decoded = jwt.verify(token, process.env.TOKEN_SECRET)
+  const user = await userController.readOne({_id: decoded.id})
+  req.user = user
+  next()
+}
+
+
 
 
 //SHOW ALL USERS
 async function getAllUser() {
-    return await userController.read()
+  return await userController.read();
 }
-
 
 //SHOW ONE BY EMAIL
 async function getUserByEmail(email) {
-    const userEmail = await userController.readOne({ email:email })
-    if (!userEmail) throw "User not exist"
-    return userEmail
+  const userEmail = await userController.readOne({ email: email });
+  if (!userEmail) throw "User not exist";
+  return userEmail;
 }
 
-
-//SHOW ONE BY EMAIL OR PASSWORD
+//SHOW ONE BY EMAIL AND PASSWORD
 async function getUserByEmailAndPassword(email, password) {
-    const userN = await userController.readOne({ email: email, password: password })
-    return userN
+  const userN = await userController.readOne({
+    email: email,
+    password: password,
+  });
+  return userN;
 }
-
 
 //UPDATE USER
-async function updateUser(userEmail, data) {
-    const exist = await userController.readOne({ email: userEmail })
-    if (!exist) throw "User not exist"
+async function updateUser(id, data) {
+  const exist = await userController.readOne({ _id: id });
+  if (!exist) throw "User not exist";
 
-    let dataOfUserToUpdate = {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        password: data.password,
-        profilePic: data.profilePic
-    }
-    await userController.update({ email: userEmail }, dataOfUserToUpdate)
+  let dataOfUserToUpdate = {
+    firstName: data.firstName,
+    lastName: data.lastName,
+    password: data.password,
+    profilePic: data.profilePic,
+  };
+  await userController.update({ _id: id }, dataOfUserToUpdate);
 
-    return await userController.readOne({ email: userEmail })
+  return await userController.readOne({ _id: id });
 }
-
-
 
 //DELETE USER
-async function deleteUser(email){
-    const exist = await userController.readOne({email: email})
-    if(!exist) throw "User not exist"
-    return await userController.delOne({email: email})
+async function deleteUser(id) {
+  const exist = await userController.readOne({ _id: id });
+  if (!exist) throw "User not exist";
+  return await userController.delOne({ _id: id });
 }
-
-// //USER PERMISSION
-
-// //VALIDATION
-// async function authentication(req, res, next){
-//     const {auth}= req.headers;
-//     if(!auth){
-//         res.status(400).send("headers not correct")
-//         return
-//     }
-//     const [email, password] = auth.split(":")
-//     if(!email || !password){
-//         res.status(400).send("email or password not correct")
-//         return
-//     }
-//     try{
-//         const userEP = await getUserByEmailAndPassword(email, password)
-//         if(!userEP){
-//             res.status(401).send("user not exist");
-//             return;
-//         }
-//         req.user = userEP;
-//         next()
-//     }
-//     catch (err) {
-//         res.status(500).send("server problem");
-//     }
-// }
-// //DELETE PERMISSION
-// async function authorization(req, res, next){
-//     if(req.params.userEmail !== req.user.email){
-//         res.status(401).send("id not mach");
-//         return;
-//     }
-//     next()
-// }
-
 
 async function addUser(user) {
   const exist = await userController.readOne(user);
   if (exist) throw "User is exist already";
 
   let errorList = await areFieldsFull(user);
-  errorList = errorList.concat(await detailsValidation(user)) 
+  errorList = errorList.concat(await detailsValidation(user));
   if (errorList.length) throw errorList;
+
+  const hashed = await bcrypt.hash(user.password, 10);
 
   let newUser = {
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
-    password: user.password,
-    profilePic: user.profilePic
-  }
-  
-  return await userController.create(newUser);
+    password: hashed,
+    profilePic: user.profilePic,
+  };
+
+   const NewUser = await userController.create(newUser);
+
+   const token = jwt.sign({id: newUser. _id} ,process.env.TOKEN_SECRET)
+   return [NewUser ,token]
 }
 
 async function areFieldsFull(user) {
@@ -125,16 +125,17 @@ async function detailsValidation(user) {
   if (!regex.test(user.password)) errors.push("invalid password");
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(user.email)) errors.push("invalid email");
-  return errors
+  return errors;
 }
 
 module.exports = {
-    getAllUser,
-    addUser,
-    getUserByEmail,
-    updateUser,
-    deleteUser,
-    getUserByEmailAndPassword
-    // authentication,
-    // authorization
-}
+  getAllUser,
+  addUser,
+  getUserByEmail,
+  updateUser,
+  deleteUser,
+  getUserByEmailAndPassword,
+  validateUser,
+  authenticateUser,
+  authentication
+};

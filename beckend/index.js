@@ -11,7 +11,7 @@ app.use(cors())
 
 
 const userRouter = require('./router/user.router')
-app.use('/users', userRouter)
+app.use('/', userRouter)
 
 const massageRouter = require('./router/massage.router');
 app.use('/massages', massageRouter)
