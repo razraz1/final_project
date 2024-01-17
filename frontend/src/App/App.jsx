@@ -7,7 +7,7 @@ import UserContext from "../context/UseContext";
 import Login from "../Login/Login";
 import Layout from "../Layout/Layout";
 
-export default function App() {
+export default function App(props) {
   const [user, setUser] = useState();
 
   const [profileImg, setProfileImg] = useState(
@@ -19,7 +19,7 @@ export default function App() {
         <ProfileImgContext.Provider value={{ profileImg, setProfileImg }}>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="*" element={<Layout />} />
+            <Route path="*" element={<Layout  handleSearch={props.handleSearch}/>} />
           </Routes>
         </ProfileImgContext.Provider>
       </UserContext.Provider>

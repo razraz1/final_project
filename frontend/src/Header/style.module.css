@@ -44,7 +44,7 @@
 
 }
 
-/* .header .input {
+.header .input {
     border-radius: 50px;
     padding-left:25px ;
     width: 60vw;
@@ -59,7 +59,7 @@
     outline: none;
     background-color: rgb(237, 237, 250);
     
-} */
+}
 
 .imgChat img{
     width: 70px;
@@ -67,10 +67,10 @@
     border-radius: 100%;
 }
 
-/* @media (width < 900px) {
+@media (width < 900px) {
     .header input {
         
         width: 45vw;
     }
     
-} */
+}
