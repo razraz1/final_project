@@ -8,8 +8,9 @@ export default function Outbox() {
 const [emails, setEmails] = useState([]);
 
 useEffect(() => {
-  const userEmail = "emily.davis@gmail.com";
-  axios.get("http://localhost:3000/massages/" + userEmail).then((res) => {
+  const userEmail = "jafne.smith@gmail.com";
+  axios.get("http://localhost:3000/massages/to/" + userEmail).then((res) => {
+    console.log(res);
     setEmails(res.data);
   });
 }, []);
@@ -28,7 +29,7 @@ useEffect(() => {
                 <td className={styles.name}> {email.to.map(email => (email))}</td>
                 <td className={styles.title}> {email.title} </td>
                 <td className={styles.trash}> {<BsTrash3 />} </td>
-                <td className={styles.date}> {email.createDate} </td>
+                <td className={styles.date}> {new Date(email.createDate).toLocaleDateString()} </td>
               </tr>
             ))
           )}
