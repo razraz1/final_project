@@ -6,7 +6,6 @@ router.all("*", (req, res, next) => {
   console.log("All request go passes here");
   next();
 });
-
 //LOGIN
 router.post("/login", async (req, res) => {
   try {
