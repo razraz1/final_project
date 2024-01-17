@@ -24,6 +24,8 @@ router.get('/to/:userEmail', async (req, res) => {
         res.status(400).send(err)
     }
 })
+
+
 //OUTBOX EMAIL
 router.get('/:userEmail', async (req, res) => {
     try {
