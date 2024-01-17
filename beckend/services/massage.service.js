@@ -15,9 +15,7 @@ async function getAllMyInboxEmail(email) {
 }
 
 async function getAllMyOutboxEmail(email) {
-    const myEmailHistory = await massageController.read({ from: email, isActive: {
-        $elemMatch: { active: true }
-    } })
+    const myEmailHistory = await massageController.read({ from: email, fromIsActive: true})
     if (!myEmailHistory) throw "No out massage"
     return { "MY OUTBOX": myEmailHistory }
 }
@@ -73,7 +71,6 @@ async function deleteOneMassageById(userEmail, id) {
     else {
         throw "No permission"
     }
-}
 
 
 //TRASH EMAIL
