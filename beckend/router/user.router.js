@@ -22,6 +22,8 @@ router.get("/:userEmail", async (req, res) => {
   }
 });
 
+
+
 //UPDATE USER
 router.put("/:userEmail", async (req, res) => {
   try {
