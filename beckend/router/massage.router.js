@@ -15,7 +15,7 @@ router.get('/search/:userEmail', async (req, res) => {
 })
 
 //INBOX EMAIL
-router.get('/to/:userEmail', async (req, res) => {
+router.get('/:userEmail', async (req, res) => {
     try {
         const data = await massageService.getAllMyInboxEmail(req.params.userEmail)
         res.send(data)
@@ -27,7 +27,7 @@ router.get('/to/:userEmail', async (req, res) => {
 
 
 //OUTBOX EMAIL
-router.get('/:userEmail', async (req, res) => {
+router.get('/from/:userEmail', async (req, res) => {
     try {
         const data = await massageService.getAllMyOutboxEmail(req.params.userEmail)
         res.send(data)
@@ -59,12 +59,24 @@ router.delete("/del/:userEmail/:id", async (req, res) => {
     }
 });
 
+//ONLY THE SENDER DELETE
+router.delete('/sendDelete/:userEmail/:id', async (req, res)=>{
+    try{
+        const delMassage = await massageService.onlyTheSenderDelete(req.params.userEmail, req.params.id)
+        res.status(204).send(delMassage)
+    }
+    catch(error){
+        res.status(400).send(error)
+    }
+})
+
 //TRASH EMAIL
 router.get("/trashMail/:userEmail", async (req, res) => {
     try {
         const massages = await massageService.getTrashMail(
             req.params.userEmail
         );
+        console.log(massages);
         res.send(massages);
     } catch {
         res.status(500).send("Internal Server Error");

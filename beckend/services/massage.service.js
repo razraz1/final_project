@@ -2,7 +2,6 @@ const massageController = require("../dal/massage.controller");
 const massageModel = require("../dal/massage.model");
 
 //GET ALL MASSAGE
-
 async function getAllMyInboxEmail(email) {
     const myEmailHistory = await massageController.read({
         to: email, isActive: {
@@ -15,10 +14,12 @@ async function getAllMyInboxEmail(email) {
 }
 
 async function getAllMyOutboxEmail(email) {
-    const myEmailHistory = await massageController.read({ from: email, fromIsActive: true})
-    if (!myEmailHistory) throw "No out massage"
+    const myEmailHistory = await massageController.read({ from: email, fromIsActive: true })
+    if (!myEmailHistory || myEmailHistory.length === 0) throw "No out massage"
     return { "MY OUTBOX": myEmailHistory }
 }
+
+
 //SEARCH
 async function searchEmails(userEmail, text) {
     return await massageController.searchEmail(userEmail, text)
@@ -71,11 +72,27 @@ async function deleteOneMassageById(userEmail, id) {
     else {
         throw "No permission"
     }
+}
 
+async function onlyTheSenderDelete(userEmail, id) {
+    const exist = await massageController.readOne({ _id: id })
+    if (!exist) throw "No massage to delete";
+    return await massageController.delOneForSender({ _id: id, from: userEmail })
+}
 
 //TRASH EMAIL
 async function getTrashMail(userEmail) {
-    return await massageController.readTrash({ to: userEmail })
+    console.log(userEmail);
+    return await massageController.readTrash({
+        $or: [
+            {
+                to: userEmail, isActive: {
+                    $elemMatch: { to: userEmail, active: false }
+                }
+            },
+            { from: userEmail, fromIsActive: false }
+        ]
+    })
 }
 
 //SEND MASSAGE
@@ -83,13 +100,40 @@ async function sendMassage(massage) {
     let errorList = await areFieldsFull(massage);
     errorList = errorList.concat(await detailsValidation(massage));
     if (errorList.length) throw errorList;
+
+    const notExist = [];
+    const exist = []
+
+    for(let recipient of massage.to){
+        const existUser = await checkUserByEmail(recipient)
+        if(existUser){
+            exist.push(recipient)
+        }else{
+            notExist.push(recipient)
+        }
+    }
+    if(exist.length === 0){
+        return {
+            message:"Message not sent to anyone because they not exist:",
+            notExistUser: notExist
+        }
+    }
+    
     const newMassageInstance = new massageModel({
         from: massage.from,
-        to: massage.to,
+        to: exist,
         title: massage.title,
         massageBody: massage.massageBody,
     });
+    
     const savedMassage = await newMassageInstance.save();
+    if(notExist.length > 0){
+        return {
+            message:`Message sent to existing users: ${exist}` ,
+            notExistUser: notExist
+        }
+    }
+
     return savedMassage
     // return await massageController.create(massage);
 }
@@ -111,6 +155,13 @@ async function detailsValidation(massage) {
     return errors;
 }
 
+//SHOW ONE BY EMAIL 
+async function checkUserByEmail(email) {
+    const check = await massageController.readOneUser({ email: email })
+    console.log(check);
+    return !!check
+  }
+
 
 module.exports = {
     getAllMyInboxEmail,
@@ -118,7 +169,7 @@ module.exports = {
     deleteOneMassageById,
     getTrashMail,
     sendMassage,
-    // getUserByEmailAndPassword,
+    onlyTheSenderDelete,
     searchEmails,
     alreadyReadMassage
 }

@@ -1,6 +1,8 @@
 const userController = require("../dal/user.controller");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken")
+
+
 //LOGIN
 async function validateUser(user) {
   let errors = [];
@@ -15,20 +17,20 @@ async function authenticateUser(user) {
   console.log(match);
   if (!match) throw "user is not exist";
 
- const token = jwt.sign({id: logedUser. _id} ,process.env.TOKEN_SECRET)
- return token
+  const token = jwt.sign({ id: logedUser._id }, process.env.TOKEN_SECRET)
+  return token
 }
 
 
-async function authentication(req, res, next){
-  const auth =  req.headers.authorization;
+async function authentication(req, res, next) {
+  const auth = req.headers.authorization;
   if (!auth)
-      throw "error"
-    const token = auth.split(" ")[1];
-    if (!token)
+    throw "error"
+  const token = auth.split(" ")[1];
+  if (!token)
     throw "error"
   const decoded = jwt.verify(token, process.env.TOKEN_SECRET)
-  const user = await userController.readOne({_id: decoded.id})
+  const user = await userController.readOne({ _id: decoded.id })
   req.user = user
   next()
 }
@@ -46,15 +48,6 @@ async function getUserByEmail(email) {
   const userEmail = await userController.readOne({ email: email });
   if (!userEmail) throw "User not exist";
   return userEmail;
-}
-
-//SHOW ONE BY EMAIL AND PASSWORD
-async function getUserByEmailAndPassword(email, password) {
-  const userN = await userController.readOne({
-    email: email,
-    password: password,
-  });
-  return userN;
 }
 
 //UPDATE USER
@@ -98,10 +91,10 @@ async function addUser(user) {
     profilePic: user.profilePic,
   };
 
-   const NewUser = await userController.create(newUser);
+  const NewUser = await userController.create(newUser);
 
-   const token = jwt.sign({id: newUser. _id} ,process.env.TOKEN_SECRET)
-   return [NewUser ,token]
+  const token = jwt.sign({ id: newUser._id }, process.env.TOKEN_SECRET)
+  return [NewUser, token]
 }
 
 async function areFieldsFull(user) {
@@ -134,7 +127,6 @@ module.exports = {
   getUserByEmail,
   updateUser,
   deleteUser,
-  getUserByEmailAndPassword,
   validateUser,
   authenticateUser,
   authentication

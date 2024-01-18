@@ -1,4 +1,5 @@
-const massageModel = require('../dal/massage.model')
+const massageModel = require('../dal/massage.model');
+const userModel = require('../dal/user.model');
 
 async function create(data) {
   return massageModel.create(data);
@@ -6,18 +7,23 @@ async function create(data) {
 
 //SHOW ALL
 async function read(filter) {
-  return await massageModel.find({ ...filter});
+  return await massageModel.find({ ...filter });
 }
 
 //SHOW TRASH
 async function readTrash(filter) {
-  return await massageModel.find({ ...filter, isActive: false });
+  console.log(filter);
+  return await massageModel.find({ ...filter});
 }
 
 //SHOW ONE
 async function readOne(filter) {
-  console.log(filter);
   return await massageModel.findOne({ ...filter });
+}
+
+//CHECK USER IF EXIST
+async function readOneUser(filter) {
+  return await userModel.findOne({ ...filter });
 }
 
 //UPDATE
@@ -46,6 +52,11 @@ async function delOne(filter, update, condition) {
   return await massageModel.updateOne(filter, update, condition);
 }
 
+//ONLY THE SENDER DELETE
+async function delOneForSender(filter) {
+  return await massageModel.updateOne(filter, { fromIsActive: false });
+}
+
 async function updateMany(filter, data) {
   return await massageModel.updateMany({ ...filter, isActive: true }, data);
 }
@@ -67,4 +78,6 @@ module.exports = {
   readTrash,
   searchEmail,
   readMassage,
+  delOneForSender,
+  readOneUser
 }

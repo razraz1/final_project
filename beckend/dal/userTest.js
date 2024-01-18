@@ -1,111 +1,78 @@
 
+
 const users = [
-    {
+  {
       firstName: "John",
       lastName: "Doe",
-      email: "jfohn.doe@example.com",
-      createdDate: new Date("2022-01-01"),
-      isActive: true,
-      password:"trcvifu6"
-    },
-    {
+      email: "john.doe@example.com",
+      password: "trcvifu6",
+      profilePic: "profile-pic-1.jpg"
+  },
+  {
       firstName: "Jane",
       lastName: "Smith",
-      email: "jafne.smith@gmail.com",
-      createdDate: new Date("2022-02-15"),
-      isActive: true,
-      password:"trcviyfu6"
-    },
-    {
+      email: "jane.smith@gmail.com",
+      password: "trcviyfu6",
+      profilePic: "profile-pic-2.jpg"
+  },
+  {
       firstName: "Robert",
       lastName: "Johnson",
-      email: "rfobert.johnson@example.com",
-      createdDate: new Date("2022-03-10"),
-      isActive: true,
-      password:"trcifu6"
-    },
-    {
+      email: "robert.johnson@example.com",
+      password: "trcifu6",
+      profilePic: "profile-pic-3.jpg"
+  },
+  {
       firstName: "Emily",
       lastName: "Davis",
-      email: "emfily.davis@gmail.com",
-      createdDate: new Date("2022-04-20"),
-      isActive: true,
-      password:"trcvllifu6"
-    },
-    {
+      email: "emily.davis@gmail.com",
+      password: "trcvllifu6",
+      profilePic: "profile-pic-4.jpg"
+  },
+  {
       firstName: "Michael",
       lastName: "Clark",
-      email: "mifchael.clark@example.com",
-      createdDate: new Date("2022-05-05"),
-      isActive: true,
-      password:"trcvkjhifu6"
-    },
-    {
+      email: "michael.clark@example.com",
+      password: "trcvkjhifu6",
+      profilePic: "profile-pic-5.jpg"
+  },
+  {
       firstName: "Samantha",
       lastName: "Baker",
-      email: "samfantha.baker@gmail.com",
-      createdDate: new Date("2022-06-15"),
-      isActive: true,
-      password:"trcvigvhbjnfu6"
-    },
-    {
+      email: "samantha.baker@gmail.com",
+      password: "trcvigvhbjnfu6",
+      profilePic: "profile-pic-6.jpg"
+  },
+  {
       firstName: "David",
       lastName: "Harris",
-      email: "davfid.harris@example.com",
-      createdDate: new Date("2022-07-01"),
-      isActive: true,
-      password:"trcvhjnifu6"
-    },
-    {
+      email: "david.harris@example.com",
+      password: "trcvhjnifu6",
+      profilePic: "profile-pic-7.jpg"
+  },
+  {
       firstName: "Isabel",
       lastName: "Young",
-      email: "isabfel.young@gmail.com",
-      createdDate: new Date("2022-08-10"),
-      isActive: true,
-      password:"trcvifu6oo"
-    },
-    {
+      email: "isabel.young@gmail.com",
+      password: "trcvifu6oo",
+      profilePic: "profile-pic-8.jpg"
+  },
+  {
       firstName: "Alex",
       lastName: "Miller",
-      email: "alfex.miller@gmail.com",
-      createdDate: new Date("2022-09-20"),
-      isActive: true,
-      password:"trcvifnnu6"
-    },
-    {
+      email: "alex.miller@gmail.com",
+      password: "trcvifnnu6",
+      profilePic: "profile-pic-9.jpg"
+  },
+  {
       firstName: "Daniel",
       lastName: "Garcia",
-      email: "danifel.garcia@example.com",
-      createdDate: new Date("2022-10-05"),
-      isActive: true,
-      password:"trcvifu6vv"
-    },
-    {
-      firstName: "Sophia",
-      lastName: "Perez",
-      email: "sophffia.perez@gmail.com",
-      createdDate: new Date("2022-11-15"),
-      isActive: true,
-      password:"trcviccfu6"
-    },
-    {
-      firstName: "Ethan",
-      lastName: "Taylor",
-      email: "ethafn.taylor@example.com",
-      createdDate: new Date("2022-12-01"),
-      isActive: true,
-      password:"tru6"
-    },
-    {
-      firstName: "Olivia",
-      lastName: "Wilson",
-      email: "olivifa.wilson@gmail.com",
-      createdDate: new Date("2023-01-10"),
-      isActive: true,
-      password:"trcvighjklfu6"
-    },
-  ];
-
+      email: "daniel.garcia@example.com",
+      password: "trcvifu6vv",
+      profilePic: "profile-pic-10.jpg"
+  }
+];
+// require('dotenv').config();
 //   const db = require('./db')
 //   db.connect()
 
