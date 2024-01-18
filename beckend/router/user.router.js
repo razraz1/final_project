@@ -18,6 +18,7 @@ router.post("/login", async (req, res) => {
     res.status(401).send(error);
   }
 });
+
 //GET ALL USERS
 router.get("/", async (req, res) => {
   const data = await userServes.getAllUser();

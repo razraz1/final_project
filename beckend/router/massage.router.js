@@ -15,7 +15,7 @@ router.get('/search/:userEmail', async (req, res) => {
 })
 
 //INBOX EMAIL
-router.get('/to/:userEmail', async (req, res) => {
+router.get('/:userEmail', async (req, res) => {
     try {
         const data = await massageService.getAllMyInboxEmail(req.params.userEmail)
         res.send(data)
@@ -27,7 +27,7 @@ router.get('/to/:userEmail', async (req, res) => {
 
 
 //OUTBOX EMAIL
-router.get('/:userEmail', async (req, res) => {
+router.get('/from/:userEmail', async (req, res) => {
     try {
         const data = await massageService.getAllMyOutboxEmail(req.params.userEmail)
         res.send(data)
