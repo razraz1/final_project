@@ -9,14 +9,13 @@ export default function Inbox() {
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    const userEmail = "jafne.smith@gmail.com";
-    let action = "from";
-    axios
-      .get(`http://localhost:3000/massages/${action}/${userEmail}`)
-      .then((res) => {
-        setEmails(res.data);
-        console.log(res.data);
-      });
+    const userEmail = "daniel.garcia@example.com";
+    console.log(emails);
+    axios.get(`http://localhost:3000/massages/${userEmail}`).then((res) => {
+      console.log(res.data, "ppppp");
+      setEmails(res.data);
+      console.log(emails, "oooo");
+    });
   }, [refresh]);
 
   const deletion = (massagesId) => {
@@ -31,15 +30,11 @@ export default function Inbox() {
     <div className={styles.inbox}>
       <table>
         <tbody>
-          {emails.length === 0 ? (
-            <tr>
-              <td>There is no inbox</td>
-            </tr>
-          ) : (
+          {Array.isArray(emails) && emails.length === 0 ? (
             emails.map((email) => (
               <tr key={email._id}>
                 <td className={styles.name}> {email.from} </td>
-                <td className={styles.title}> {email.title} </td>
+                <td className={styles.title}> {email.title}</td>
                 <td
                   className={styles.trash}
                   onClick={() => deletion(email._id)}
@@ -47,9 +42,16 @@ export default function Inbox() {
                   {" "}
                   {<BsTrash3 />}{" "}
                 </td>
-                <td className={styles.date}> {new Date(email.createDate).toLocaleDateString()} </td>
+                <td className={styles.date}>
+                  {" "}
+                  {new Date(email.createDate).toLocaleDateString()}{" "}
+                </td>
               </tr>
             ))
+          ) : (
+            <tr>
+              <td>There is no inbox</td>
+            </tr>
           )}
         </tbody>
       </table>
