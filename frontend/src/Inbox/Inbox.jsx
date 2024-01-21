@@ -4,42 +4,48 @@ import styles from "./style.module.css";
 import { BsTrash3 } from "react-icons/bs";
 import axios from "axios";
 
-export default function Inbox() {
+export default function Inbox({ searchResult }) {
   const [emails, setEmails] = useState([]);
   const [refresh, setRefresh] = useState(false);
 
+  const userEmail = "jane.smith@gmail.com";
   useEffect(() => {
-    const userEmail = "jafne.smith@gmail.com";
-    let action = "from";
-    axios
-      .get(`http://localhost:3000/massages/${action}/${userEmail}`)
-      .then((res) => {
-        setEmails(res.data);
-        console.log(res.data);
-      });
-  }, [refresh]);
+    if (searchResult && searchResult.length > 0) {
+      setEmails(searchResult)
+    } else {
+      axios.get(`http://localhost:3000/massages/${userEmail}`)
+        .then((res) => {
+          setEmails(res.data["MY INBOX"]);
+        });
+    }
+  }, [refresh, searchResult]);
 
   const deletion = (massagesId) => {
-    axios.delete(`http://localhost:3000/massages/` + massagesId).then((res) => {
-      if (res.data.acknowledged) {
-        setRefresh((prevRefresh) => !prevRefresh);
-      }
-    });
+    axios.delete(`http://localhost:3000/massages/del/${userEmail}/` + massagesId)
+      .then((res) => {
+        if (res.data.acknowledged) {
+          window.location.reload()
+        }
+        else {
+          setRefresh((prevRefresh) => !prevRefresh);
+        }
+      });
   };
 
   return (
     <div className={styles.inbox}>
       <table>
         <tbody>
-          {emails.length === 0 ? (
-            <tr>
-              <td>There is no inbox</td>
-            </tr>
-          ) : (
+          {emails && emails.length > 0 ? (
             emails.map((email) => (
-              <tr key={email._id}>
+              <tr key={email._id} className={styles.emailResult}>
                 <td className={styles.name}> {email.from} </td>
-                <td className={styles.title}> {email.title} </td>
+                <td className={styles.title}> {email.title}</td>
+                {/* <td className={styles.massageBody}> {email.massageBody}</td> */}
+                <td className={styles.date}>
+                  {" "}
+                  {new Date(email.createDate).toLocaleDateString()}{" "}
+                </td>
                 <td
                   className={styles.trash}
                   onClick={() => deletion(email._id)}
@@ -47,9 +53,15 @@ export default function Inbox() {
                   {" "}
                   {<BsTrash3 />}{" "}
                 </td>
-                <td className={styles.date}> {new Date(email.createDate).toLocaleDateString()} </td>
               </tr>
             ))
+          ) : (
+            <tr>
+              <td>{searchResult && searchResult.length > 0 ?
+                "No search results" :
+                "There is no inbox"}
+              </td>
+            </tr>
           )}
         </tbody>
       </table>

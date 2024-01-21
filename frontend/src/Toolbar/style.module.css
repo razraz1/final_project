@@ -27,10 +27,11 @@
     font-size: 1.4rem;
     background-color: rgb(242, 250, 252);
     border: 0;
+    
 }
 .toolbar button:hover{
     background-color: rgb(237, 237, 250);
-    
+    cursor: pointer;
 }
 
 

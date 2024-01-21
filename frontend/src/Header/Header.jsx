@@ -4,34 +4,13 @@ import { CgProfile } from "react-icons/cg";
 import { SlMagnifier } from "react-icons/sl";
 import ProfileImgContext from "../context/ProfileImgContext";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function Header(props) {
  
-    const handleSearch = async (text) => {
-        const userEmail = "emily.davis@gmail.com";
-        try {
-            const response = await axios.post('http://localhost:3000/search' + userEmail, {
-                text: text,
-            })
-            if (!response.data) {
-                throw new Error('Search request failed')
-            }
-            console.log(response);
-            const filterEmail = response.data.filter(email => email.from.toLowerCase().includes(text.toLowerCase()))
-
-            setSearchResult(filterEmail)
-        }
-        catch (error) {
-            console.error('Error during search:', error.message);
-        }
-    }
-
-
-    console.log(props);
     const editing = () => { };
 
     const firstName = "moshe";
-    // const name = ""
 
     const { profileImg } = useContext(ProfileImgContext);
 
@@ -57,7 +36,7 @@ export default function Header(props) {
                 <input
                     type="text"
                     // value={}
-                    onInput={(e) => handleSearch(e.target.value)}
+                    onInput={(e) => {props.handleSearch(e.target.value)}}
                     placeholder="Enter a name to search..."
                 />
                 <SlMagnifier />
