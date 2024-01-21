@@ -28,9 +28,6 @@ async function authenticateUser(user) {
 async function refreshToken(accessToken) {
   const decoded = jwt.verify(accessToken, process.env.TOKEN_SECRET);
 
-  // const expirationTime = new Date(decoded.exp * 1000);
-
-  // if (expirationTime > new Date()) {
     const user = await userController.readOne({ _id: decoded.id });
     if (user.accessToken.length > 0) {
       const existToken = user.accessToken.find(
@@ -45,8 +42,10 @@ async function refreshToken(accessToken) {
         return refreshToken;
       }
     }
-  // }
 }
+
+
+
 
 async function deleteToken(id, accessToken) {
   const deleted = await userController.update(

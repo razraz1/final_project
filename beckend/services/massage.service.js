@@ -2,25 +2,24 @@ const massageController = require("../dal/massage.controller");
 const massageModel = require("../dal/massage.model");
 
 //GET ALL MASSAGE
-
+//INBOX
 async function getAllMyInboxEmail(email) {
     const myEmailHistory = await massageController.read({
         to: email, isActive: {
             $elemMatch: { to: email, active: true }
         }
     })
-    console.log(myEmailHistory);
     if (!myEmailHistory) throw "No massage"
     return { "MY INBOX": myEmailHistory }
 }
-
+//OUTBOX
 async function getAllMyOutboxEmail(email) {
-    const myEmailHistory = await massageController.read({ from: email, isActive: {
-        $elemMatch: { active: true }
-    } })
-    if (!myEmailHistory) throw "No out massage"
+    const myEmailHistory = await massageController.read({ from: email, fromIsActive: true })
+    if (!myEmailHistory || myEmailHistory.length === 0) throw "No out massage"
     return { "MY OUTBOX": myEmailHistory }
 }
+
+
 //SEARCH
 async function searchEmails(userEmail, text) {
     return await massageController.searchEmail(userEmail, text)
@@ -40,7 +39,7 @@ async function alreadyReadMassage(userEmail, id) {
             new: true
         }
         await massageController.readMassage({ _id: id }, update, condition);
-        return "Message marked as read for user: " + userEmail;
+        return "Message marked as read for user: " + userEmail + exist.massageBody;
     } else {
         throw "User does not have permission to mark this message as read";
     }
@@ -73,29 +72,71 @@ async function deleteOneMassageById(userEmail, id) {
         throw "No permission"
     }
 }
-
+//SENDER DELETE
+async function onlyTheSenderDelete(userEmail, id) {
+    const exist = await massageController.readOne({ _id: id })
+    if (!exist) throw "No massage to delete";
+    return await massageController.delOneForSender({ _id: id, from: userEmail })
+}
 
 //TRASH EMAIL
 async function getTrashMail(userEmail) {
-    return await massageController.readTrash({ to: userEmail })
+    return await massageController.readTrash({
+        $or: [
+            {
+                to: userEmail, isActive: {
+                    $elemMatch: { to: userEmail, active: false }
+                }
+            },
+            { from: userEmail, fromIsActive: false }
+        ]
+    })
 }
+
 
 //SEND MASSAGE
 async function sendMassage(email, massage) {
     let errorList = await areFieldsFull(massage);
     errorList = errorList.concat(await detailsValidation(massage));
     if (errorList.length) throw errorList;
+
+    const notExist = [];
+    const exist = []
+
+    for (let recipient of massage.to) {
+        const existUser = await checkUserByEmail(recipient)
+        if (existUser) {
+            exist.push(recipient)
+        } else {
+            notExist.push(recipient)
+        }
+    }
+    if (exist.length === 0) {
+        return {
+            message: "Message not sent to anyone because they not exist:",
+            notExistUser: notExist
+        }
+    }
+
     const newMassageInstance = new massageModel({
         from: email,
-        to: massage.to,
+        to: exist,
         title: massage.title,
         massageBody: massage.massageBody,
     });
+
     const savedMassage = await newMassageInstance.save();
+    if (notExist.length > 0) {
+        return {
+            message: `Message sent to existing users: ${exist}`,
+            notExistUser: notExist
+        }
+    }
+
     return savedMassage
-    // return await massageController.create(massage);
 }
 
+//EMAIL VALIDATION
 async function areFieldsFull(massage) {
     let errors = [];
     if (!massage.to || massage.to.length === 0) errors.push("No recipient");
@@ -113,6 +154,13 @@ async function detailsValidation(massage) {
     return errors;
 }
 
+//SHOW ONE BY EMAIL 
+async function checkUserByEmail(email) {
+    const check = await massageController.readOneUser({ email: email })
+    console.log(check);
+    return !!check
+}
+
 
 module.exports = {
     getAllMyInboxEmail,
@@ -120,6 +168,7 @@ module.exports = {
     deleteOneMassageById,
     getTrashMail,
     sendMassage,
+    onlyTheSenderDelete,
     searchEmails,
     alreadyReadMassage
 }

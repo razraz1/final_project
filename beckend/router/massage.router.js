@@ -10,10 +10,12 @@ router.get('/search', async (req, res) => {
         res.send(data)
     }
     catch (error) {
+        console.log(error,"e");
         res.status(400).send(error)
     }
 })
 
+//GET ALL USER MASSAGE
 //INBOX EMAIL
 router.get('/', middlewares.authentication, async (req, res) => {
     try {
@@ -24,8 +26,6 @@ router.get('/', middlewares.authentication, async (req, res) => {
         res.status(400).send(err)
     }
 })
-
-
 //OUTBOX EMAIL
 router.get('/from', middlewares.authentication, async (req, res) => {
     try {
@@ -36,6 +36,7 @@ router.get('/from', middlewares.authentication, async (req, res) => {
         res.status(400).send(err)
     }
 })
+
 
 //READ MASSAGE
 router.put('/reading/:id', middlewares.authentication, async (req, res) => {
@@ -48,6 +49,7 @@ router.put('/reading/:id', middlewares.authentication, async (req, res) => {
     }
 })
 
+
 //DELETE MASSAGE
 router.delete("/del/:id", middlewares.authentication, async (req, res) => {
     try {
@@ -58,12 +60,25 @@ router.delete("/del/:id", middlewares.authentication, async (req, res) => {
     }
 });
 
+//ONLY THE SENDER DELETE
+router.delete('/senderDelete/:id', async (req, res)=>{
+    try{
+        const delMassage = await massageService.onlyTheSenderDelete(req.user.email, req.params.id)
+        res.status(204).send(delMassage)
+    }
+    catch(error){
+        res.status(400).send(error)
+    }
+})
+
+
 //TRASH EMAIL
 router.get("/trashMail", middlewares.authentication, async (req, res) => {
     try {
         const massages = await massageService.getTrashMail(
             req.user.email
         );
+        console.log(massages);
         res.send(massages);
     } catch {
         res.status(500).send("Internal Server Error");
