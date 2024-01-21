@@ -3,12 +3,13 @@ import React, { useState } from 'react'
 import styles from './style.module.css'
 // import Header from '../Header/Header';
 import Layout from '../Layout/Layout';
+import Content from '../Content/Content';
 
 export default function Search(props) {
     // let {handleSearch} = props
 
   
-    const [searchResult, setSearchResult] = useState([]);
+    // const [searchResult, setSearchResult] = useState([]);
 
     // const handleSearch = async (text) => {
 
@@ -34,7 +35,7 @@ export default function Search(props) {
     return (
         <div>
 
-            {/* <Layout handleSearch={handleSearch} /> */}
+            {/* <Content handleSearch={handleSearch} /> */}
             <div className={styles.inbox}>
                 <table>
                     <tbody>

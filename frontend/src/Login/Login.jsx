@@ -5,7 +5,7 @@ import axios from 'axios'
 
 export default function Login() {
 
-    const { serUser } = useContext(UserContext)
+    const { setUser } = useContext(UserContext)
     const [data, setData] = useState({})
 
     const handleChange = (e) => {

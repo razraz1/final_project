@@ -2,18 +2,20 @@ const express = require("express");
 const massageService = require("../services/massage.service");
 const router = express.Router();
 
-//GET ALL USER MASSAGE
+//GET ALL USER MASSAGE BY SEARCH
 router.get('/search/:userEmail', async (req, res) => {
-    console.log(req.params.userEmail, req.query.text);
+    console.log(req.params.userEmail, req.query.text,"rot");
     try {
         const data = await massageService.searchEmails(req.params.userEmail, req.query.text)
         res.send(data)
     }
     catch (error) {
+        console.log(error,"e");
         res.status(400).send(error)
     }
 })
 
+//GET ALL USER MASSAGE
 //INBOX EMAIL
 router.get('/:userEmail', async (req, res) => {
     try {
@@ -24,8 +26,6 @@ router.get('/:userEmail', async (req, res) => {
         res.status(400).send(err)
     }
 })
-
-
 //OUTBOX EMAIL
 router.get('/from/:userEmail', async (req, res) => {
     try {
@@ -37,17 +37,19 @@ router.get('/from/:userEmail', async (req, res) => {
     }
 })
 
+
 //READ MASSAGE
 router.put('/reading/:userEmail/:id', async (req, res) => {
     try {
         const readMassage = await massageService.alreadyReadMassage(req.params.userEmail, req.params.id)
-        res.status(204).send(readMassage)
+        res.status(200).send(readMassage)
     }
     catch (error) {
         console.log(error);
         res.status(400).send(error)
     }
 })
+
 
 //DELETE MASSAGE
 router.delete("/del/:userEmail/:id", async (req, res) => {
@@ -69,6 +71,7 @@ router.delete('/sendDelete/:userEmail/:id', async (req, res)=>{
         res.status(400).send(error)
     }
 })
+
 
 //TRASH EMAIL
 router.get("/trashMail/:userEmail", async (req, res) => {

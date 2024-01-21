@@ -2,17 +2,17 @@ const massageController = require("../dal/massage.controller");
 const massageModel = require("../dal/massage.model");
 
 //GET ALL MASSAGE
+//INBOX
 async function getAllMyInboxEmail(email) {
     const myEmailHistory = await massageController.read({
         to: email, isActive: {
             $elemMatch: { to: email, active: true }
         }
     })
-    console.log(myEmailHistory);
     if (!myEmailHistory) throw "No massage"
     return { "MY INBOX": myEmailHistory }
 }
-
+//OUTBOX
 async function getAllMyOutboxEmail(email) {
     const myEmailHistory = await massageController.read({ from: email, fromIsActive: true })
     if (!myEmailHistory || myEmailHistory.length === 0) throw "No out massage"
@@ -40,7 +40,7 @@ async function alreadyReadMassage(userEmail, id) {
             new: true
         }
         await massageController.readMassage({ _id: id }, update, condition);
-        return "Message marked as read for user: " + userEmail;
+        return "Message marked as read for user: " + userEmail + exist.massageBody;
     } else {
         throw "User does not have permission to mark this message as read";
     }
@@ -73,7 +73,7 @@ async function deleteOneMassageById(userEmail, id) {
         throw "No permission"
     }
 }
-
+//SENDER DELETE
 async function onlyTheSenderDelete(userEmail, id) {
     const exist = await massageController.readOne({ _id: id })
     if (!exist) throw "No massage to delete";
@@ -82,7 +82,6 @@ async function onlyTheSenderDelete(userEmail, id) {
 
 //TRASH EMAIL
 async function getTrashMail(userEmail) {
-    console.log(userEmail);
     return await massageController.readTrash({
         $or: [
             {
@@ -95,6 +94,7 @@ async function getTrashMail(userEmail) {
     })
 }
 
+
 //SEND MASSAGE
 async function sendMassage(massage) {
     let errorList = await areFieldsFull(massage);
@@ -104,40 +104,40 @@ async function sendMassage(massage) {
     const notExist = [];
     const exist = []
 
-    for(let recipient of massage.to){
+    for (let recipient of massage.to) {
         const existUser = await checkUserByEmail(recipient)
-        if(existUser){
+        if (existUser) {
             exist.push(recipient)
-        }else{
+        } else {
             notExist.push(recipient)
         }
     }
-    if(exist.length === 0){
+    if (exist.length === 0) {
         return {
-            message:"Message not sent to anyone because they not exist:",
+            message: "Message not sent to anyone because they not exist:",
             notExistUser: notExist
         }
     }
-    
+
     const newMassageInstance = new massageModel({
         from: massage.from,
         to: exist,
         title: massage.title,
         massageBody: massage.massageBody,
     });
-    
+
     const savedMassage = await newMassageInstance.save();
-    if(notExist.length > 0){
+    if (notExist.length > 0) {
         return {
-            message:`Message sent to existing users: ${exist}` ,
+            message: `Message sent to existing users: ${exist}`,
             notExistUser: notExist
         }
     }
 
     return savedMassage
-    // return await massageController.create(massage);
 }
 
+//EMAIL VALIDATION
 async function areFieldsFull(massage) {
     let errors = [];
     if (!massage.to || massage.to.length === 0) errors.push("No recipient");
@@ -160,7 +160,7 @@ async function checkUserByEmail(email) {
     const check = await massageController.readOneUser({ email: email })
     console.log(check);
     return !!check
-  }
+}
 
 
 module.exports = {

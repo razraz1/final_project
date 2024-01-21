@@ -23,6 +23,8 @@
     flex-direction: column;
 }
 
+
+
 .inbox table tr {
     display: flex;
     justify-content: space-around;
@@ -30,6 +32,7 @@
     text-align: center;
     align-items: center;
     padding-top: 10px;
+    cursor: pointer;
 }
 
 .inbox table tr:hover {
@@ -38,8 +41,8 @@
 
 .inbox table tr td {
     height: 50px;
-    
-    
+
+
 }
 
 .inbox table tr .name {
@@ -47,7 +50,7 @@
     font-size: 2rem;
     overflow: hidden;
 
-    
+
 }
 
 .inbox table tr .title {
@@ -61,6 +64,11 @@
     font-size: 2rem;
     width: 5vw;
 
+}
+
+.inbox table tr .trash:hover {
+    transform: scale(1.2);
+    transition: transform 0.1s ease-in-out;
 }
 
 .inbox table tr .date {
@@ -87,6 +95,7 @@
 }
 
 @media (width < 1000px) {
+
     .inbox table tr .title,
     .inbox table tr .name,
     .inbox table tr .trash {
