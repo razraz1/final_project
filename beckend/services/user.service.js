@@ -1,6 +1,7 @@
 const userController = require("../dal/user.controller");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+
 //LOGIN
 async function validateUser(user) {
   let errors = [];
@@ -12,29 +13,72 @@ async function validateUser(user) {
 async function authenticateUser(user) {
   const logedUser = await getUserByEmail(user.email);
   const match = await bcrypt.compare(user.password, logedUser.password);
-  console.log(match);
   if (!match) throw "user is not exist";
 
- const token = jwt.sign({id: logedUser. _id} ,process.env.TOKEN_SECRET)
- return token
+  const token = jwt.sign({ id: logedUser._id }, process.env.TOKEN_SECRET, {
+    expiresIn: "30d",
+  });
+  await userController.update(
+    { _id: logedUser._id },
+    { $push: { accessToken: token } }
+  );
+  return token;
 }
 
+async function refreshToken(accessToken) {
+  const decoded = jwt.verify(accessToken, process.env.TOKEN_SECRET);
 
-async function authentication(req, res, next){
-  const auth =  req.headers.authorization;
-  if (!auth)
-      throw "error"
-    const token = auth.split(" ")[1];
-    if (!token)
-    throw "error"
-  const decoded = jwt.verify(token, process.env.TOKEN_SECRET)
-  const user = await userController.readOne({_id: decoded.id})
-  req.user = user
-  next()
+  // const expirationTime = new Date(decoded.exp * 1000);
+
+  // if (expirationTime > new Date()) {
+    const user = await userController.readOne({ _id: decoded.id });
+    if (user.accessToken.length > 0) {
+      const existToken = user.accessToken.find(
+        (token) => token === accessToken
+      );
+      if (existToken) {
+        const refreshToken = jwt.sign(
+          { id: user._id },
+          process.env.TOKEN_SECRET,
+          { expiresIn: "10m" }
+        );
+        return refreshToken;
+      }
+    }
+  // }
 }
 
+async function deleteToken(id, accessToken) {
+  const deleted = await userController.update(
+    { _id: id },
+    { $pull: { accessToken: accessToken } }
+  );
+  return deleted;
+}
 
+async function areFieldsFull(user) {
+  let errors = [];
+  if (!user.firstName) errors.push("missing firstName");
+  if (!user.lastName) errors.push("missing lastName");
+  if (!user.email) errors.push("missing email");
+  if (!user.password) errors.push("missing password");
 
+  return errors;
+}
+
+async function detailsValidation(user) {
+  let errors = [];
+  if (typeof user.firstName !== "string" || user.firstName.length < 2)
+    errors.push("invalid firstName");
+  if (typeof user.lastName !== "string" || user.lastName.length < 2)
+    errors.push("invalid lastName");
+  const regex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/;
+  if (!regex.test(user.password)) errors.push("invalid password");
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(user.email)) errors.push("invalid email");
+  return errors;
+}
 
 //SHOW ALL USERS
 async function getAllUser() {
@@ -46,15 +90,6 @@ async function getUserByEmail(email) {
   const userEmail = await userController.readOne({ email: email });
   if (!userEmail) throw "User not exist";
   return userEmail;
-}
-
-//SHOW ONE BY EMAIL AND PASSWORD
-async function getUserByEmailAndPassword(email, password) {
-  const userN = await userController.readOne({
-    email: email,
-    password: password,
-  });
-  return userN;
 }
 
 //UPDATE USER
@@ -97,35 +132,15 @@ async function addUser(user) {
     password: hashed,
     profilePic: user.profilePic,
   };
+  
+  const NewUser = await userController.create(newUser);
+  const token = jwt.sign({ id: NewUser._id }, process.env.TOKEN_SECRET, {expiresIn:"30d"});
 
-   const NewUser = await userController.create(newUser);
+  NewUser.accessToken.push(token);
 
-   const token = jwt.sign({id: newUser. _id} ,process.env.TOKEN_SECRET)
-   return [NewUser ,token]
-}
+  await NewUser.save();
 
-async function areFieldsFull(user) {
-  let errors = [];
-  if (!user.firstName) errors.push("missing firstName");
-  if (!user.lastName) errors.push("missing lastName");
-  if (!user.email) errors.push("missing email");
-  if (!user.password) errors.push("missing password");
-
-  return errors;
-}
-
-async function detailsValidation(user) {
-  let errors = [];
-  if (typeof user.firstName !== "string" || user.firstName.length < 2)
-    errors.push("invalid firstName");
-  if (typeof user.lastName !== "string" || user.lastName.length < 2)
-    errors.push("invalid lastName");
-  const regex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/;
-  if (!regex.test(user.password)) errors.push("invalid password");
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(user.email)) errors.push("invalid email");
-  return errors;
+  return [NewUser, token];
 }
 
 module.exports = {
@@ -134,8 +149,10 @@ module.exports = {
   getUserByEmail,
   updateUser,
   deleteUser,
-  getUserByEmailAndPassword,
   validateUser,
   authenticateUser,
-  authentication
+  refreshToken,
+  deleteToken,
+  areFieldsFull,
+  detailsValidation,
 };

@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema({
         minLength: 5,
         maxLength: 1024
     },
+    accessToken:{
+        type: [String]
+    },
     profilePic:{
         type: String,
     },

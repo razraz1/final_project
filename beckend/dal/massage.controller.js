@@ -16,7 +16,6 @@ async function readTrash(filter) {
 
 //SHOW ONE
 async function readOne(filter) {
-  console.log(filter);
   return await massageModel.findOne({ ...filter });
 }
 

@@ -1,23 +1,53 @@
 const express = require("express");
 const userServes = require("../services/user.service");
+const middlewares = require("../services/middlewares")
 const router = express.Router();
+const jwt = require("jsonwebtoken");
+
 
 router.all("*", (req, res, next) => {
   console.log("All request go passes here");
   next();
 });
+
 //LOGIN
 router.post("/login", async (req, res) => {
   try {
     const errorList = await userServes.validateUser(req.body);
     if (errorList.length) res.status(404).send(errorList);
     const token = await userServes.authenticateUser(req.body);
-    res.send(token);
+    res.send({
+      accessToken: token
+    });
   } catch (error) {
-    console.log(error);
-    res.status(401).send(error);
+    res.status(400).send(error);
   }
 });
+
+//REFRESH
+router.post("/refresh", async (req, res) => {
+  try {
+    const accessToken = req.body.accessToken;
+    const refreshToken = await userServes.refreshToken(accessToken)
+    res.send({ refresh: refreshToken });
+  } catch (err) {
+    res.status(400).send(err);
+  }
+});
+
+// LOGOUT
+router.post("/logout", middlewares.authentication, async (req, res) => {
+  try {
+    const accessToken = req.body.accessToken;
+    const userId = req.user._id;
+    const tokenDeleted = await userServes.deleteToken(userId, accessToken);
+    res.send(tokenDeleted);
+  } catch (err) {
+    res.status(400).send(err);
+  }
+});
+
+
 //GET ALL USERS
 router.get("/", async (req, res) => {
   const data = await userServes.getAllUser();
@@ -25,7 +55,7 @@ router.get("/", async (req, res) => {
 });
 
 //GET ONE USER
-router.get("/user", userServes.authentication, async (req, res) => {
+router.get("/user", middlewares.authentication, async (req, res) => {
   try {
     const user = req.user;
     res.send(user);
@@ -36,8 +66,9 @@ router.get("/user", userServes.authentication, async (req, res) => {
 
 
 
+
 //UPDATE USER
-router.put("/user", userServes.authentication, async (req, res) => {
+router.put("/user", middlewares.authentication, async (req, res) => {
   try {
     const updateMe = await userServes.updateUser(req.user._id, req.body);
     res.send(updateMe);
@@ -48,7 +79,7 @@ router.put("/user", userServes.authentication, async (req, res) => {
 });
 
 //DELETE USER
-router.delete("/user", userServes.authentication, async (req, res) => {
+router.delete("/user", middlewares.authentication, async (req, res) => {
   console.log(req.user);
   try {
     const delUser = userServes.deleteUser(req.user._id);

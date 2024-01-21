@@ -29,7 +29,6 @@ async function searchEmails(userEmail, text) {
 
 //READ MASSAGE
 async function alreadyReadMassage(userEmail, id) {
-    console.log(id);
     const exist = await massageController.readOne({ _id: id })
     if (!exist) throw "No massage to read";
     if (exist.to.includes(userEmail)) {
@@ -82,12 +81,12 @@ async function getTrashMail(userEmail) {
 }
 
 //SEND MASSAGE
-async function sendMassage(massage) {
+async function sendMassage(email, massage) {
     let errorList = await areFieldsFull(massage);
     errorList = errorList.concat(await detailsValidation(massage));
     if (errorList.length) throw errorList;
     const newMassageInstance = new massageModel({
-        from: massage.from,
+        from: email,
         to: massage.to,
         title: massage.title,
         massageBody: massage.massageBody,
@@ -121,7 +120,6 @@ module.exports = {
     deleteOneMassageById,
     getTrashMail,
     sendMassage,
-    // getUserByEmailAndPassword,
     searchEmails,
     alreadyReadMassage
 }

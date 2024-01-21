@@ -1,12 +1,12 @@
 const express = require("express");
 const massageService = require("../services/massage.service");
+const middlewares = require("../services/middlewares")
 const router = express.Router();
 
 //GET ALL USER MASSAGE
-router.get('/search/:userEmail', async (req, res) => {
-    console.log(req.params.userEmail, req.query.text);
+router.get('/search', async (req, res) => {
     try {
-        const data = await massageService.searchEmails(req.params.userEmail, req.query.text)
+        const data = await massageService.searchEmails(req.user.email, req.query.text)
         res.send(data)
     }
     catch (error) {
@@ -15,9 +15,9 @@ router.get('/search/:userEmail', async (req, res) => {
 })
 
 //INBOX EMAIL
-router.get('/to/:userEmail', async (req, res) => {
+router.get('/', middlewares.authentication, async (req, res) => {
     try {
-        const data = await massageService.getAllMyInboxEmail(req.params.userEmail)
+        const data = await massageService.getAllMyInboxEmail(req.user.email)
         res.send(data)
     }
     catch (err) {
@@ -27,9 +27,9 @@ router.get('/to/:userEmail', async (req, res) => {
 
 
 //OUTBOX EMAIL
-router.get('/:userEmail', async (req, res) => {
+router.get('/from', middlewares.authentication, async (req, res) => {
     try {
-        const data = await massageService.getAllMyOutboxEmail(req.params.userEmail)
+        const data = await massageService.getAllMyOutboxEmail(req.user.email)
         res.send(data)
     }
     catch (err) {
@@ -38,32 +38,31 @@ router.get('/:userEmail', async (req, res) => {
 })
 
 //READ MASSAGE
-router.put('/reading/:userEmail/:id', async (req, res) => {
+router.put('/reading/:id', middlewares.authentication, async (req, res) => {
     try {
-        const readMassage = await massageService.alreadyReadMassage(req.params.userEmail, req.params.id)
-        res.status(204).send(readMassage)
+        const readMassage = await massageService.alreadyReadMassage(req.user.email, req.params.id)
+        res.status(200).send(readMassage)
     }
     catch (error) {
-        console.log(error);
         res.status(400).send(error)
     }
 })
 
 //DELETE MASSAGE
-router.delete("/del/:userEmail/:id", async (req, res) => {
+router.delete("/del/:id", middlewares.authentication, async (req, res) => {
     try {
-        const delMassage = await massageService.deleteOneMassageById(req.params.userEmail, req.params.id);
-        res.status(204).send(delMassage);
+        const delMassage = await massageService.deleteOneMassageById(req.user.email, req.params.id);
+        res.status(200).send(delMassage);
     } catch (err) {
         res.status(400).send(err);
     }
 });
 
 //TRASH EMAIL
-router.get("/trashMail/:userEmail", async (req, res) => {
+router.get("/trashMail", middlewares.authentication, async (req, res) => {
     try {
         const massages = await massageService.getTrashMail(
-            req.params.userEmail
+            req.user.email
         );
         res.send(massages);
     } catch {
@@ -73,9 +72,9 @@ router.get("/trashMail/:userEmail", async (req, res) => {
 
 
 //SEND MASSAGE
-router.post("/:userEmail", async (req, res) => {
+router.post("/send", middlewares.authentication, async (req, res) => {
     try {
-        const newMassage = await massageService.sendMassage(req.body);
+        const newMassage = await massageService.sendMassage(req.user.email, req.body);
         res.send(newMassage);
     } catch (err) {
         res.status(400).send(err);
