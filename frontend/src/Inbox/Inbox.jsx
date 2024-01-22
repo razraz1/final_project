@@ -4,24 +4,30 @@ import styles from "./style.module.css";
 import { BsTrash3 } from "react-icons/bs";
 import axios from "axios";
 
-export default function Inbox({ searchResult }) {
+export default function Inbox({ searchResult, data }) {
   const [emails, setEmails] = useState([]);
   const [refresh, setRefresh] = useState(false);
 
-  const userEmail = "jane.smith@gmail.com";
+  // const userEmail = "jane.smith@gmail.com";
   useEffect(() => {
+    const headers =  {
+      Authorization: `Bearer ${data}`
+    }
     if (searchResult && searchResult.length > 0) {
       setEmails(searchResult)
     } else {
-      axios.get(`http://localhost:3000/massages/${userEmail}`)
+      axios.post(`http://localhost:3000/massages/`,{headers})
         .then((res) => {
           setEmails(res.data["MY INBOX"]);
         });
     }
-  }, [refresh, searchResult]);
+  }, [refresh, searchResult, data]);
 
   const deletion = (massagesId) => {
-    axios.delete(`http://localhost:3000/massages/del/${userEmail}/` + massagesId)
+    const headers =  {
+      Authorization: `Bearer ${data}`
+    }
+    axios.delete(`http://localhost:3000/massages/del/${massagesId}`,{headers})
       .then((res) => {
         if (res.data.acknowledged) {
           window.location.reload()

@@ -13,6 +13,7 @@ async function validateUser(user) {
 async function authenticateUser(user) {
   const logedUser = await getUserByEmail(user.email);
   const match = await bcrypt.compare(user.password, logedUser.password);
+  console.log(match);
   if (!match) throw "user is not exist";
 
   const token = jwt.sign({ id: logedUser._id }, process.env.TOKEN_SECRET, {

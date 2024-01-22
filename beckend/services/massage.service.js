@@ -81,7 +81,7 @@ async function onlyTheSenderDelete(userEmail, id) {
 
 //TRASH EMAIL
 async function getTrashMail(userEmail) {
-    return await massageController.readTrash({
+    const trash = await massageController.readTrash({
         $or: [
             {
                 to: userEmail, isActive: {
@@ -91,6 +91,7 @@ async function getTrashMail(userEmail) {
             { from: userEmail, fromIsActive: false }
         ]
     })
+    return {"MY TRASH": trash}
 }
 
 
