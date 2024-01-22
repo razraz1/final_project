@@ -9,6 +9,7 @@ import Login from "../Login/Login";
 import Layout from "../Layout/Layout";
 
 export default function App(props) {
+  
   const [user, setUser] = useState();
   const [newEmail, setNewEmail] = useState(false);
 

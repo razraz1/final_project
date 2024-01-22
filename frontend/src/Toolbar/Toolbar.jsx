@@ -6,10 +6,13 @@ import { MdInbox } from "react-icons/md";
 import { LuTrash2 } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import NewEmailOpenContext from "../context/NewEmailOpenContext";
+import NavigationContext from "../context/NavigationContext";
+
 
 
 export default function Toolbar() {
   const { newEmail, setNewEmail } = useContext(NewEmailOpenContext);
+  const {setNavigation } = useContext(NavigationContext);
 
   const [isNewEmailOpen, setIsNewEmailOpen] = useState(false);
 
@@ -32,25 +35,25 @@ export default function Toolbar() {
         </div>
       )}
 
-      <Link to="/inbox">
-        <button className={styles.inbox}>
+      {/* <Link to="/inbox"> */}
+        <button className={styles.inbox} onClick={() => setNavigation("inbox")}>
           <span>
             <MdInbox />
           </span>
           <span className={styles.toolbarBut}>inbox</span>
         </button>
-      </Link>
+      {/* </Link> */}
 
-      <Link to="/outbox">
-        <button className={styles.sent}>
+      {/* <Link to="/outbox"> */}
+        <button className={styles.sent} onClick={() => setNavigation("outbox")}>
           <span>
             <VscSend />
           </span>
           <span className={styles.toolbarBut}>outbox</span>
         </button>
-      </Link>
+      {/* </Link> */}
 
-      <button className={styles.trash}>
+      <button className={styles.trash} onClick={() => setNavigation("trash")}>
         <span>
           <LuTrash2 />
         </span>

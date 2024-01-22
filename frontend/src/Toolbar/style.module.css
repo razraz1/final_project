@@ -15,19 +15,22 @@
     position: sticky;
     align-items: center;
     top: 15vh;
-    
 }
 .toolbar button{
-    width: 13vw;
+    width: 11vw;
     height: 50px;
     border-radius: 100px;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     background-color: rgb(242, 250, 252);
     border: 0;
+<<<<<<< HEAD
+    padding: 8px;
+=======
     
+>>>>>>> 96fcb06a2880b8e79ce78fb5116dbd50fe3bc081
 }
 .toolbar button:hover{
     background-color: rgb(237, 237, 250);
