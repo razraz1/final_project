@@ -26,6 +26,7 @@ router.get('/', middlewares.authentication, async (req, res) => {
         res.status(400).send(err)
     }
 })
+
 //OUTBOX EMAIL
 router.get('/from', middlewares.authentication, async (req, res) => {
     try {

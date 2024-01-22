@@ -37,9 +37,14 @@ export default function Mailboxes({ searchResult }) {
         myData = "MY TRASH";
         // noMessage = "No junk mail";
       }
-      const userEmail = "jane.smith@gmail.com";
+      // const userEmail = "jane.smith@gmail.com";
+      const authToken = localStorage.getItem(token);
+
+
       axios
-      .get(`http://localhost:3000/massages/${variable}${userEmail}`)
+      .get(`http://localhost:3000/massages/${variable}`, {
+      headers:{'Authorization': `Bearer ${authToken}`}
+      })
       .then((res) => {
         setEmails(res.data[myData]);
       });
