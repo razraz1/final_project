@@ -15,6 +15,7 @@ router.post("/login", async (req, res) => {
   try {
     const errorList = await userServes.validateUser(req.body);
     if (errorList.length) res.status(404).send(errorList);
+    
     const token = await userServes.authenticateUser(req.body);
     res.send({
       accessToken: token
