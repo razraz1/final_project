@@ -1,6 +1,7 @@
 const massageModel = require('../dal/massage.model');
 const userModel = require('../dal/user.model');
 
+//CREATE USER
 async function create(data) {
   return massageModel.create(data);
 }
@@ -13,7 +14,7 @@ async function read(filter) {
 //SHOW TRASH
 async function readTrash(filter) {
   console.log(filter);
-  return await massageModel.find({ ...filter});
+  return await massageModel.find({ ...filter });
 }
 
 //SHOW ONE
@@ -42,7 +43,6 @@ async function searchEmail(userEmail, text) {
       ],
     }
   );
-  console.log("query", query);
   return query;
 }
 

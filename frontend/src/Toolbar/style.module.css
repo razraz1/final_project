@@ -26,11 +26,15 @@
     font-size: 1.3rem;
     background-color: rgb(242, 250, 252);
     border: 0;
+<<<<<<< HEAD
     padding: 8px;
+=======
+    
+>>>>>>> 96fcb06a2880b8e79ce78fb5116dbd50fe3bc081
 }
 .toolbar button:hover{
     background-color: rgb(237, 237, 250);
-    
+    cursor: pointer;
 }
 
 

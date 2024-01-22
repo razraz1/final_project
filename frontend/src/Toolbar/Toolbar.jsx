@@ -19,6 +19,7 @@ export default function Toolbar() {
   const handleNewEmailClick = () => {
     setNewEmail(true);
   };
+  
   return (
     <div className={styles.toolbar}>
       <button className={styles.newEmail} onClick={handleNewEmailClick}>
@@ -30,9 +31,7 @@ export default function Toolbar() {
 
       {isNewEmailOpen && (
         <div className={styles.newEmailPopup}>
-          {/* כאן תוסיף את הקוד לתיבת הטקסט לכתיבת המייל החדש */}
           <input type="text" placeholder="הכנס נושא..." />
-          {/* וכל קומפוננטות נוספות שתזהה למקרה */}
         </div>
       )}
 

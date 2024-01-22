@@ -5,12 +5,17 @@ import axios from 'axios'
 
 export default function Login() {
 
+<<<<<<< HEAD
     const {user, setUser } = useContext(UserContext)
     const [ setData] = useState({})
     const  o = () => {
       setUser()
       console.log(user);
     }
+=======
+    const { setUser } = useContext(UserContext)
+    const [data, setData] = useState({})
+>>>>>>> 96fcb06a2880b8e79ce78fb5116dbd50fe3bc081
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })

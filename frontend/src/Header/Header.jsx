@@ -4,6 +4,7 @@ import { CgProfile } from "react-icons/cg";
 import { SlMagnifier } from "react-icons/sl";
 import ProfileImgContext from "../context/ProfileImgContext";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function Header(props) {
   const editing = () => {};
