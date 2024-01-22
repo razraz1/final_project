@@ -5,8 +5,12 @@ import axios from 'axios'
 
 export default function Login() {
 
-    const { serUser } = useContext(UserContext)
-    const [data, setData] = useState({})
+    const {user, setUser } = useContext(UserContext)
+    const [ setData] = useState({})
+    const  o = () => {
+      setUser()
+      console.log(user);
+    }
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
@@ -43,7 +47,7 @@ export default function Login() {
               </label>
             </div>
   
-            <button className={styles.loginBtn} type='submit'>LOGIN</button>
+            <button className={styles.loginBtn} onClick={o} type='submit'>LOGIN</button>
           </form>
         </div>
       </div>

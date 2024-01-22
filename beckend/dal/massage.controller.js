@@ -35,10 +35,14 @@ async function update(filter, data) {
 async function searchEmail(userEmail, text) {
   const query = await massageModel.find({
     $or: [
-      { from: userEmail, massageBody: { $regex: text, $options: 'i' }, isActive: true },
-      { to: userEmail, massageBody: { $regex: text, $options: 'i' }, isActive: true }
-    ]
-  });
+        { from: userEmail,  massageBody: { $regex: text}, fromIsActive:true },
+        {  to: userEmail, isActive: {
+          $elemMatch: { to: userEmail, active: true }
+      }, massageBody: { $regex: text}  },
+      ],
+    }
+  );
+  console.log("query", query);
   return query;
 }
 
