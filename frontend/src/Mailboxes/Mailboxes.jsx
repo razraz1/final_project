@@ -44,8 +44,6 @@ export default function Mailboxes({ searchResult }) {
     else if (navigation === "search") {
       console.log(searchResult);
       setEmails(searchResult);
-
-
     }
   }, [navigation, searchResult]);
 
