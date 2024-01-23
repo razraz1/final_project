@@ -9,12 +9,12 @@ import Login from "../Login/Login";
 import Layout from "../Layout/Layout";
 
 export default function App(props) {
-  
+
   const [user, setUser] = useState();
   const [newEmail, setNewEmail] = useState(false);
-
+  // console.log(user || localStorage.token);
   const navigate = useNavigate()
-  
+
   useEffect(() => {
     navigate((!user && !localStorage.token) ? '/login' : '/')
   }, [user])

@@ -3,16 +3,22 @@ import styles from "./style.module.css";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-
+ 
 
 export default function MessageContent() {
     const [emails, setEmails] = useState([]);
 
     // const { email } = useParams();
-    const email = "65ad15ee6ae4ac28f9c49b1b"
-    const userEmail = "jane.smith@gmail.com"
-    useEffect(() => {
-        axios.get(`http://localhost:3000/massages/reading${email}`) 
+    // const email = "65ad15ee6ae4ac28f9c49b1b"
+    // const userEmail = "jane.smith@gmail.com"
+    const authToken = localStorage.getItem('token')
+
+    useEffect((massagesId) => {
+        axios.get(`http://localhost:3000/massages/reading/${massagesId}`,{
+            headers:{
+              Authorization: `Bearer ${authToken}` 
+            }
+          }) 
         .then((res) => {
             setEmails(res.data)
             console.log(emails);

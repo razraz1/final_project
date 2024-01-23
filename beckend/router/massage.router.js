@@ -4,7 +4,7 @@ const middlewares = require("../services/middlewares")
 const router = express.Router();
 
 //GET ALL USER MASSAGE
-router.get('/search', async (req, res) => {
+router.get('/search', middlewares.authentication, async (req, res) => {
     try {
         const data = await massageService.searchEmails(req.user.email, req.query.text)
         res.send(data)
@@ -33,6 +33,7 @@ router.get('/from', middlewares.authentication, async (req, res) => {
         res.send(data)
     }
     catch (err) {
+        console.log(err);
         res.status(400).send(err)
     }
 })
@@ -61,7 +62,7 @@ router.delete("/del/:id", middlewares.authentication, async (req, res) => {
 });
 
 //ONLY THE SENDER DELETE
-router.delete('/senderDelete/:id', async (req, res)=>{
+router.delete('/senderDelete/:id',middlewares.authentication, async (req, res)=>{
     try{
         const delMassage = await massageService.onlyTheSenderDelete(req.user.email, req.params.id)
         res.status(204).send(delMassage)

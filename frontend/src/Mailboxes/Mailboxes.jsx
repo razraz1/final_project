@@ -8,57 +8,60 @@ import NavigationContext from "../context/NavigationContext";
 
 export default function Mailboxes({ searchResult }) {
   const [emails, setEmails] = useState([]);
-  // const [refresh, setRefresh] = useState(false);
-  // const [navigation, setNavigation] = useContext(NavigationContext)
   const { navigation } = useContext(NavigationContext);
 
-  const [refresh, setRefresh] = useState(false);
-  
-  // let navigation = "Inbox";
-  
+  const authToken = localStorage.getItem('token')
+
   useEffect(() => {
-    // let noMessage = "";
+    console.log(navigation);
     let variable = "";
     let myData = "MY INBOX";
     if (navigation === "inbox" || navigation === "outbox" || navigation === "trash") {
-      console.log(navigation,'kkkkkk');
-      if (navigation === "Inbox") {
+      console.log(navigation);
+      if (navigation === "inbox") {
         variable = "";
         myData = "MY INBOX";
-        // noMessage = "No incoming mail";
       }
       if (navigation === "outbox") {
         variable = "from/";
         myData = "MY OUTBOX";
-        // noMessage = "No outgoing  mail";
       }
       if (navigation === "trash") {
         variable = "trashMail/";
         myData = "MY TRASH";
-        // noMessage = "No junk mail";
       }
-      const userEmail = "jane.smith@gmail.com";
       axios
-      .get(`http://localhost:3000/massages/${variable}${userEmail}`)
-      .then((res) => {
-        setEmails(res.data[myData]);
-      });
-    } else if(navigation === "search") {
-      if (searchResult && searchResult.length > 0) {
-        setEmails(searchResult);
-        console.log(emails);
-        
-      }
+        .get(`http://localhost:3000/massages/${variable}`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`
+          }
+        })
+        .then((res) => {
+          console.log(res, "res");
+          setEmails(res.data[myData]);
+        });
     }
-    
+    else if (navigation === "search") {
+      console.log(searchResult);
+      setEmails(searchResult);
+
+
+    }
   }, [navigation, searchResult]);
-  
+
   const deletion = (massagesId) => {
-    axios.delete(`http://localhost:3000/massages/` + massagesId).then((res) => {
-      if (res.data.acknowledged) {
-        setRefresh((prevRefresh) => !prevRefresh);
+    axios.delete(`http://localhost:3000/massages/del/${massagesId}`, {
+      headers: {
+        Authorization: `Bearer ${authToken}`
       }
-    });
+    })
+      .then((res) => {
+        setEmails((prevEmails) => prevEmails.filter((email) => email._id !== massagesId));
+
+      }
+      ).catch(err => {
+        "Delete field"
+      })
   };
 
   return (
@@ -76,10 +79,13 @@ export default function Mailboxes({ searchResult }) {
                     {email.title}
                   </Link>
                 </td>
-                <td
-                  className={styles.trash}
-                  onClick={() => deletion(email._id)}
-                >
+                <td className={styles.title}>
+                  <Link to={`messageContent/${email.email}`}>
+                    {email.massageBody}
+                  </Link>
+                </td>
+                <td className={styles.trash}
+                  onClick={() => deletion(email._id)}>
                   {<BsTrash3 />}
                 </td>
 
@@ -93,8 +99,9 @@ export default function Mailboxes({ searchResult }) {
           ) : (
             <tr>
               <td>
-                {/* {noMessage} */}
-                {/* {searchResult && searchResult.length > 0 ? "no search result " : 'no inbox'} */}
+                {searchResult && searchResult.length > 0 ?
+                  "no search result " :
+                  'no inbox to show'}
               </td>
             </tr>
           )}
