@@ -4,41 +4,42 @@ import Content from "../Content/Content";
 import Search from "../Search/Search";
 import axios from "axios";
 import NavigationContext from "../context/NavigationContext";
+import Mailboxes from "../Mailboxes/Mailboxes";
 
 export default function Layout(props) {
   const [searchResult, setSearchResult] = useState([]);
   const [navigation, setNavigation] = useState("inbox");
-
+  const [previousNavigation, setPreviousNavigation] = useState("inbox")
 
   const handleSearch = async (text) => {
-    const userEmail = "jane.smith@gmail.com";
+    const authToken = localStorage.getItem('token')
     try {
       const response = await axios.get(
-        "http://localhost:3000/massages/search/" + userEmail,
+        "http://localhost:3000/massages/search" ,
         {
           params: {
             text: text,
           },
+            headers:{
+              Authorization: `Bearer ${authToken}` 
+            }
         }
       );
       if (!response.data) {
         throw new Error("Search request failed");
       }
 
-      const filterEmail = response.data.filter((email) =>
-        email.massageBody.toLowerCase().includes(text.toLowerCase())
-      );
-
-      setSearchResult(filterEmail);
-      setNavigation("search");
-
-      // return searchResult
+  
+console.log(response.data);
+      setSearchResult(response.data);
+      if (!text.trim()) {
+        setNavigation(previousNavigation);
+      } else {
+        setPreviousNavigation(navigation);
+        setNavigation("search");
+      }
     } catch (error) {
       console.error("Error during search:", error.message);
-    } finally {
-      if (!text.trim()) {
-        setSearchResult([]);
-      }
     }
   };
 
@@ -47,6 +48,7 @@ export default function Layout(props) {
       <NavigationContext.Provider value={{ navigation, setNavigation }}>
         <Header handleSearch={handleSearch} />
         <Content searchResult={searchResult} />
+        {/* <Mailboxes  searchResult={searchResult}/> */}
       </NavigationContext.Provider>
     </div>
   );
