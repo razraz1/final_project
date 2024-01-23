@@ -38,12 +38,12 @@ export default function Mailboxes({ searchResult }) {
         // noMessage = "No junk mail";
       }
       // const userEmail = "jane.smith@gmail.com";
-      const authToken = localStorage.getItem(token);
+      // const authToken = localStorage.getItem(token);
 
 
       axios
       .get(`http://localhost:3000/massages/${variable}`, {
-      headers:{'Authorization': `Bearer ${authToken}`}
+      // headers:{'Authorization': `Bearer ${authToken}`}
       })
       .then((res) => {
         setEmails(res.data[myData]);
