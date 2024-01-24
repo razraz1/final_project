@@ -3,18 +3,20 @@ const jwt = require("jsonwebtoken");
 
 //AUTHENTICATION
 async function authentication(req, res, next) {
-  const auth = req.headers.authorization;
-  if (!auth) throw "no headers";
-  const refreshToken = auth.split(" ")[1];
-  if (!refreshToken) throw "no token";
-  const decoded = jwt.verify(refreshToken, process.env.TOKEN_SECRET);
-  if (decoded.id) {
+  try {
+    const auth = req.headers.authorization;
+    if (!auth) throw "no headers";
+    const refreshToken = auth.split(" ")[1];
+    if (!refreshToken) throw "no token";
+
+    const decoded = jwt.verify(refreshToken, process.env.TOKEN_SECRET);
     const user = await userController.readOne({ _id: decoded.id });
     req.user = user;
-  } else {
-    throw "token expired";
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(401).send(error);
   }
-  next();
 }
 
 module.exports = {

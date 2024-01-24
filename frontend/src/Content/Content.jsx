@@ -10,28 +10,31 @@ import { IoCloseSharp } from "react-icons/io5";
 import Login from "../Login/Login";
 import MessageContent from "../MessageContent/MessageContent";
 import axios from "axios";
+import { getRefreshTokens, getTokensFromLocalStorage } from "../tokens_utilitys/utility";
+
 
 export default function Content(props) {
 
   const { newEmail, setNewEmail } = useContext(NewEmailOpenContext);
-  const authToken = localStorage.getItem('token')
   const [emailData, setEmailData] = useState({
-    // from: userEmail,
     to: [],
     title: "",
     body: "",
   });
 
-  const handleSendClick = () => {
+  const handleSendClick = async () => {
+    const { authToken, accessToken } = getTokensFromLocalStorage()
+
+    const refreshedToken = await getRefreshTokens(authToken, accessToken);
+
     axios
       .post(`http://localhost:3000/massages/send/`, {
-        // from: userEmail,
         to: emailData.to,
         title: emailData.title,
         massageBody: emailData.body,
       }, {
         headers: {
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${refreshedToken}`
         }
       })
       .then((response) => {

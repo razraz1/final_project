@@ -89,7 +89,7 @@ router.delete("/user", middlewares.authentication, async (req, res) => {
     res.status(400).send(err);
   }
 });
-
+ 
 //ADD NEW USER
 router.post("/user", async (req, res) => {
   try {

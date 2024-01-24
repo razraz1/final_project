@@ -5,6 +5,10 @@ import Search from "../Search/Search";
 import axios from "axios";
 import NavigationContext from "../context/NavigationContext";
 import Mailboxes from "../Mailboxes/Mailboxes";
+import { getRefreshTokens, getTokensFromLocalStorage } from "../tokens_utilitys/utility";
+
+const authToken = localStorage.getItem('token')
+const accessToken = localStorage.getItem('accessToken')
 
 export default function Layout(props) {
   const [searchResult, setSearchResult] = useState([]);
@@ -12,8 +16,13 @@ export default function Layout(props) {
   const [previousNavigation, setPreviousNavigation] = useState("inbox")
 
   const handleSearch = async (text) => {
-    const authToken = localStorage.getItem('token')
+
+    
     try {
+      const { authToken, accessToken } = getTokensFromLocalStorage()
+      const refreshedToken = await getRefreshTokens(authToken, accessToken);
+ 
+
       const response = await axios.get(
         "http://localhost:3000/massages/search" ,
         {
@@ -21,7 +30,7 @@ export default function Layout(props) {
             text: text,
           },
             headers:{
-              Authorization: `Bearer ${authToken}` 
+              Authorization: `Bearer ${refreshedToken}` 
             }
         }
       );
@@ -29,7 +38,7 @@ export default function Layout(props) {
         throw new Error("Search request failed");
       }
 
-  
+  //YacovBinik@gmail.com
 console.log(response.data);
       setSearchResult(response.data);
       if (!text.trim()) {

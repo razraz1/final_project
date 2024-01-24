@@ -15,7 +15,7 @@ export default function App(props) {
   // console.log(user || localStorage.token);
   const navigate = useNavigate()
 
-  useEffect(() => {
+  useEffect(() => {  
     navigate((!user && !localStorage.token) ? '/login' : '/')
   }, [user])
 

@@ -2,6 +2,11 @@ import React, { useContext, useState } from 'react'
 import UserContext from '../context/UseContext'
 import styles from './style.module.css'
 import axios from 'axios'
+import{ jwtDecode } from 'jwt-decode';
+import { refreshTokens } from '../tokens_utilitys/utility';
+
+
+
 
 export default function Login() {
 
@@ -13,23 +18,11 @@ export default function Login() {
     setData({ ...data, [e.target.name]: e.target.value })
   }
 
-  const handleCheck = (e) => {
-    setData({ ...data, [e.target.name]: e.target.checked })
-  }
+  // const authToken = localStorage.getItem('token')
+  // const decoded = jwtDecode(authToken)
+  // console.log(decoded);
 
-
-  const refreshTokens = async (accessToken) => {
-    try {
-      const res = await axios.post('http://localhost:3000/refresh', { accessToken });
-      // console.log(res);
-      const refreshToken = res.data.refresh
-      localStorage.setItem('token',refreshToken)
-      setUser(refreshToken) 
-      return refreshToken
-    } catch (error) {
-      console.error("login err", error)
-    }
-  }
+  
 
   const handleAxios = async () => {
     try {
@@ -37,8 +30,11 @@ export default function Login() {
         email: data.email,
         password: data.password
       })
+      const access = res.data.accessToken
+      localStorage.setItem('accessToken', access)
       const token = await refreshTokens(res.data.accessToken)
-      return token
+      localStorage.setItem('token',token)
+      setUser(token) 
     } catch (err) {
       console.log(err);
     }
@@ -73,3 +69,5 @@ export default function Login() {
     </div>
   )
 }
+
+// export {Login, checkToken}
