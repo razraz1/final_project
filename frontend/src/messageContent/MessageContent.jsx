@@ -1,39 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import styles from "./style.module.css";
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 
  
 
-export default function MessageContent() {
+export default function MessageContent({messageContent,setMessageContent}) {
     const [emails, setEmails] = useState([]);
-
-    // const { email } = useParams();
-    // const email = "65ad15ee6ae4ac28f9c49b1b"
-    // const userEmail = "jane.smith@gmail.com"
+    const { email } = useParams();
     const authToken = localStorage.getItem('token')
 
-    useEffect((massagesId) => {
-        axios.get(`http://localhost:3000/massages/reading/${massagesId}`,{
-            headers:{
-              Authorization: `Bearer ${authToken}` 
-            }
-          }) 
-        .then((res) => {
-            setEmails(res.data)
-            console.log(emails);
-        })
-    },[])
-    
-
-
-  return (
+    return (
     <div>
         <div className={styles.messageContent}>
-            <div className={styles.to}>isketmiowect;iowehaioc ty aw ioeytwo;ietywo;u</div>
-            <div className={styles.from}></div>
-            <div className={styles.title}></div>
-            <div className={styles.body}></div>
+          <div className={styles.x} onClick={() => setMessageContent(false)}>X</div>
+            <div className={styles.from}>from: {messageContent.from}</div>
+            <div className={styles.title}>title: {messageContent.title}</div>
+            <div className={styles.body}>body: {messageContent.massageBody}</div>
         </div>
     </div>
   )

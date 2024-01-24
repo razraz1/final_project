@@ -8,7 +8,7 @@ import axios from "axios";
 
 export default function Header(props) {
   const editing = () => {};
-
+//  const name = localStorage.
   const firstName = "moshe";
   // const name = ""
 

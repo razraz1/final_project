@@ -18,6 +18,7 @@
 
 }
 
+
 .inbox table {
     display: flex;
     flex-direction: column;
@@ -106,4 +107,8 @@
         display: none;
     }
 
+}
+.isRead{
+    
+    font-size: 2rem;
 }

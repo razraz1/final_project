@@ -35,7 +35,6 @@ export default function Content(props) {
         }
       })
       .then((response) => {
-        console.log("Server Response:", response.data);
         console.log("Email sent successfully:", response.data);
         setEmailData({
           to: [],

@@ -18,7 +18,6 @@ export default function Registration() {
     setData((prevData) => {
       return { ...prevData, [e.target.name]: e.target.value };
     });
-    console.log(data,"ee");
   };
   const refreshTokens = async (accessToken) => {
       console.log("lll");
