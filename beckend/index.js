@@ -6,7 +6,7 @@ const db = require('./dal/db')
 db.connect()
 
 app.use(express.json())
-const cors = require('cors') 
+const cors = require('cors')
 app.use(cors())
 
 
@@ -15,8 +15,8 @@ app.use('/', userRouter)
 
 const massageRouter = require('./router/massage.router');
 app.use('/massages', massageRouter)
+const PORT = process.env.PORT || 3000;
 
-
-app.listen(3000 , ()=>{
+app.listen(PORT, () => {
     console.log('*** server is UP ***\nPort: 3000');
 })
