@@ -4,7 +4,7 @@ const middlewares = require("../services/middlewares")
 const router = express.Router();
 
 //GET ALL USER MASSAGE
-router.get('/search', async (req, res) => {
+router.get('/search',middlewares.authentication, async (req, res) => {
     try {
         const data = await massageService.searchEmails(req.user.email, req.query.text)
         res.send(data)

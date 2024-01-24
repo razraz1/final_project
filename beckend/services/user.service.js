@@ -53,6 +53,7 @@ async function deleteToken(id, accessToken) {
     { _id: id },
     { $pull: { accessToken: accessToken } }
   );
+  
   return deleted;
 }
 
