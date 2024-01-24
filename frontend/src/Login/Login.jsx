@@ -4,9 +4,7 @@ import styles from './style.module.css'
 import axios from 'axios'
 import{ jwtDecode } from 'jwt-decode';
 import { refreshTokens } from '../tokens_utilitys/utility';
-
-
-
+import { Link } from 'react-router-dom'
 
 export default function Login() {
 
@@ -18,11 +16,6 @@ export default function Login() {
     setData({ ...data, [e.target.name]: e.target.value })
   }
 
-  // const authToken = localStorage.getItem('token')
-  // const decoded = jwtDecode(authToken)
-  // console.log(decoded);
-
-  
 
   const handleAxios = async () => {
     try {
@@ -64,10 +57,12 @@ export default function Login() {
           </div>
 
           <button className={styles.loginBtn} type='submit' onClick={handleAxios}>LOGIN</button>
+          <Link to="/registration">
+              <button className={styles.registrationBtn} type='submit' >Registration</button>
+          </Link>
         </form>
       </div>
     </div>
   )
 }
 
-// export {Login, checkToken}

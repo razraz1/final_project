@@ -38,7 +38,6 @@ export default function Content(props) {
         }
       })
       .then((response) => {
-        console.log("Server Response:", response.data);
         console.log("Email sent successfully:", response.data);
         setEmailData({
           to: [],
@@ -58,8 +57,8 @@ export default function Content(props) {
       <Toolbar />
       <Routes>
         <Route path="/Mailboxes" element={<Mailboxes searchResult={props.searchResult} />} />
-        <Route path="*" element={<Mailboxes searchResult={props.searchResult} />} />
-        <Route path="/MessageContent" element={<MessageContent />} />
+        <Route path="/*" element={<Mailboxes searchResult={props.searchResult} />} />
+        {/* <Route path="/MessageContent" element={<MessageContent />} /> */}
         <Route path="/editing" element={<Editing />} />
       </Routes>
 

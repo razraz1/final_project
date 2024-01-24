@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styles from './style.module.css'
 import { CgProfile } from "react-icons/cg";
 import { IoPencil } from 'react-icons/io5';
@@ -10,6 +10,7 @@ import { getRefreshTokens, getTokensFromLocalStorage } from '../tokens_utilitys/
 
 export default function Editing() {
   const { profileImg, setProfileImg } = useContext(ProfileImgContext)
+  const authToken = localStorage.getItem("token");
 
 
 
@@ -28,6 +29,62 @@ export default function Editing() {
     localStorage.removeItem('token')
     localStorage.removeItem('accessToken')
   }
+  const [user, setUser] = useState('')
+  const [data, setData] = useState({
+    firstName: "",
+    lastName: ""
+  });
+
+  const handleChange = (e) => {
+    setData((prevData) => {
+      return { ...prevData, [e.target.name]: e.target.value };
+    });
+  };
+
+  const editing = async () => {
+    const { authToken, accessToken } = getTokensFromLocalStorage()
+
+    const refreshedToken = await getRefreshTokens(authToken, accessToken);
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/user`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${refreshedToken}`,
+          },
+        }
+      );
+
+      console.log("res", response);
+    } catch (error) {
+      console.error("Error while updating email status:", error);
+    }
+  };
+
+  useEffect(() => {
+    const getUser = async () => {
+
+      const { authToken, accessToken } = getTokensFromLocalStorage()
+
+      const refreshedToken = await getRefreshTokens(authToken, accessToken);
+      axios
+        .get(`http://localhost:3000/user`, {
+          headers: {
+            Authorization: `Bearer ${refreshedToken}`,
+          },
+        })
+        .then((res) => {
+          console.log(res, "res");
+          setUser(res.data)
+          console.log(user);
+        });
+    }
+    getUser()
+  }, []);
+
+  // setProfileImg('')
+
 
   return (
     <div className={styles.editing}>
@@ -43,15 +100,16 @@ export default function Editing() {
           <IoPencil />
         </div>
       </div>
-      <input type="text" name='firstName' defaultValue="firstName" />
-      <input type="text" name='lastName' defaultValue="lastName" />
-      <input type="text" name='password' defaultValue="password" />
-      <button >Editing</button>
+
+
+
+      <input type="text" name='firstName' defaultValue={user.firstName} onChange={handleChange} />
+      <input type="text" name='lastName' defaultValue={user.lastName} onChange={handleChange} />
+      <button onClick={() => { editing() }}>Edit</button>
 
       <Link to={'/login'}>
-      <button onClick={() => logOutUser()}>logOut</button>
+        <button onClick={() => logOutUser()}>LogOut</button>
       </Link>
-
     </div>
   )
 }

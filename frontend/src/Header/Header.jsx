@@ -7,10 +7,10 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Header(props) {
-    const editing = () => { };
-
+    //   const editing = () => {};
+    // //  const name = localStorage.
     const firstName = "moshe";
-    // const name = ""
+    //   // const name = ""
 
     const { profileImg } = useContext(ProfileImgContext);
     const [isEditing, setIsEditing] = useState(true);
@@ -21,7 +21,7 @@ export default function Header(props) {
                 to={isEditing ? "/editing" : "/"}
                 onClick={() => setIsEditing(!isEditing)}
             >
-                <button onClick={editing} className={styles.profilePictures}>
+                <button className={styles.profilePictures}>
                     <div>
                         {profileImg ? (
                             <img src={profileImg} alt="profileImg" />
@@ -39,7 +39,7 @@ export default function Header(props) {
                 <input
                     type="text"
                     // value={}
-                    onInput={(e) => {
+                    onChange={(e) => {
                         props.handleSearch(e.target.value);
                     }}
                     placeholder="Enter a name to search..."
