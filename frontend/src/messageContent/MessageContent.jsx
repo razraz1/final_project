@@ -15,7 +15,7 @@ export default function MessageContent({ messageContent, setMessageContent }) {
     //     const { authToken, accessToken } = getTokensFromLocalStorage()
     //     const read = async () => {
     //         const refreshedToken = await getRefreshTokens(authToken, accessToken);
-    //         axios.put(`http://localhost:3000/massages/reading/${massagesId}`, {
+    //         axios.put(`https://email-server-8ncp.onrender.com/massages/reading/${massagesId}`, {
     //             headers: {
     //                 Authorization: `Bearer ${refreshedToken}`
     //             }
@@ -27,7 +27,7 @@ export default function MessageContent({ messageContent, setMessageContent }) {
     //     }
     //     read();
     // },[])
-    
+
     const { email } = useParams();
     // const authToken = localStorage.getItem('token')
 

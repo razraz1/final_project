@@ -23,7 +23,7 @@ export default function Registration() {
       console.log("lll");
     try {
       const res = await axios.post(
-        `http://localhost:3000/refresh`,
+        `https://email-server-8ncp.onrender.com/refresh`,
         {accessToken}
       );
       const refreshToken = res.data.refresh;
@@ -37,7 +37,7 @@ export default function Registration() {
 
   const register = async () => {
     try {
-      const res = await axios.post("http://localhost:3000/user", data);
+      const res = await axios.post("https://email-server-8ncp.onrender.com/user", data);
       const refreshToken = await refreshTokens(res.data[1]);
       console.log(refreshToken);
     } catch (err) {

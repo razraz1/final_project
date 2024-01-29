@@ -26,7 +26,7 @@ export default function Mailboxes({ searchResult }) {
 
     try {
       const response = await axios.put(
-        ` http://localhost:3000/massages/reading/${email._id}`,
+        ` https://email-server-8ncp.onrender.com/massages/reading/${email._id}`,
         null,
         {
           headers: {
@@ -78,7 +78,7 @@ export default function Mailboxes({ searchResult }) {
           myData = "MY TRASH";
         }
         axios
-          .get(`http://localhost:3000/massages/${variable}`,
+          .get(`https://email-server-8ncp.onrender.com/massages/${variable}`,
             {
               headers: {
                 Authorization: `Bearer ${refreshedToken}`
@@ -111,7 +111,7 @@ export default function Mailboxes({ searchResult }) {
         deleted = "senderDelete"
       }
 
-      axios.delete(`http://localhost:3000/massages/${deleted}/${massagesId}`, {
+      axios.delete(`https://email-server-8ncp.onrender.com/massages/${deleted}/${massagesId}`, {
         headers: {
           Authorization: `Bearer ${refreshedToken}`
         }
