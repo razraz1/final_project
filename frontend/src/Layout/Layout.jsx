@@ -24,7 +24,7 @@ export default function Layout(props) {
 
 
       const response = await axios.get(
-        "http://localhost:3000/massages/search",
+        "https://email-server-8ncp.onrender.com/massages/search",
         {
           params: {
             text: text,

@@ -19,7 +19,7 @@ export default function Editing() {
 
     const refreshedToken = await getRefreshTokens(authToken, accessToken);
 
-    axios.post('http://localhost:3000/logout', {
+    axios.post('https://email-server-8ncp.onrender.com/logout', {
       accessToken: accessToken
     }, {
       headers: {
@@ -47,7 +47,7 @@ export default function Editing() {
     const refreshedToken = await getRefreshTokens(authToken, accessToken);
     try {
       const response = await axios.put(
-        `http://localhost:3000/user`,
+        `https://email-server-8ncp.onrender.com/user`,
         data,
         {
           headers: {
@@ -69,7 +69,7 @@ export default function Editing() {
 
       const refreshedToken = await getRefreshTokens(authToken, accessToken);
       axios
-        .get(`http://localhost:3000/user`, {
+        .get(`https://email-server-8ncp.onrender.com/user`, {
           headers: {
             Authorization: `Bearer ${refreshedToken}`,
           },

@@ -19,7 +19,7 @@ export default function Login() {
 
   const handleAxios = async () => {
     try {
-      const res = await axios.post('http://localhost:3000/login', {
+      const res = await axios.post('https://email-server-8ncp.onrender.com/login', {
         email: data.email,
         password: data.password
       })
