@@ -15,7 +15,7 @@ router.post("/login", async (req, res) => {
   try {
     const errorList = await userServes.validateUser(req.body);
     if (errorList.length) res.status(404).send(errorList);
-    
+
     const token = await userServes.authenticateUser(req.body);
     res.send({
       accessToken: token
@@ -89,7 +89,7 @@ router.delete("/user", middlewares.authentication, async (req, res) => {
     res.status(400).send(err);
   }
 });
-
+ 
 //ADD NEW USER
 router.post("/user", async (req, res) => {
   try {

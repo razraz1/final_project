@@ -7,15 +7,16 @@ import UserContext from "../context/UseContext";
 import NewEmailOpenContext from "../context/NewEmailOpenContext";
 import Login from "../Login/Login";
 import Layout from "../Layout/Layout";
+import Registration from "../Registration/Registration";
 
 export default function App(props) {
-  
+
   const [user, setUser] = useState();
   const [newEmail, setNewEmail] = useState(false);
-
+  // console.log(user || localStorage.token);
   const navigate = useNavigate()
-  
-  useEffect(() => {
+
+  useEffect(() => {  
     navigate((!user && !localStorage.token) ? '/login' : '/')
   }, [user])
 
@@ -28,8 +29,9 @@ export default function App(props) {
         <NewEmailOpenContext.Provider value={{ newEmail, setNewEmail }}>
           <ProfileImgContext.Provider value={{ profileImg, setProfileImg }}>
             <Routes>
+              <Route path="/registration" element={<Registration />} />
               <Route path="/login" element={<Login />} />
-              <Route path="*" element={(user || localStorage.token) && <Layout />} />
+              <Route path="*" element={(user || localStorage.token) && <Layout />} />        
             </Routes>
           </ProfileImgContext.Provider>
         </NewEmailOpenContext.Provider>

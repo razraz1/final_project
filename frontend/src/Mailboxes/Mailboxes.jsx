@@ -2,109 +2,188 @@ import React, { useContext, useEffect, useState } from "react";
 // import { BsTrash3 } from "react-icons/bs";
 import styles from "./style.module.css";
 import { BsTrash3 } from "react-icons/bs";
+import { FcApproval } from "react-icons/fc";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import NavigationContext from "../context/NavigationContext";
+import { jwtDecode } from "jwt-decode";
+import { getRefreshTokens, getTokensFromLocalStorage } from "../tokens_utilitys/utility";
+import MessageContent from "../MessageContent/MessageContent";
+import { MdMessage } from "react-icons/md";
+
 
 export default function Mailboxes({ searchResult }) {
   const [emails, setEmails] = useState([]);
-  // const [refresh, setRefresh] = useState(false);
-  // const [navigation, setNavigation] = useContext(NavigationContext)
   const { navigation } = useContext(NavigationContext);
+  const [messageContent, setMessageContent] = useState(false);
 
-  const [refresh, setRefresh] = useState(false);
-  
-  // let navigation = "Inbox";
-  
-  useEffect(() => {
-    // let noMessage = "";
-    let variable = "";
-    let myData = "MY INBOX";
-    if (navigation === "inbox" || navigation === "outbox" || navigation === "trash") {
-      console.log(navigation,'kkkkkk');
-      if (navigation === "Inbox") {
-        variable = "";
-        myData = "MY INBOX";
-        // noMessage = "No incoming mail";
-      }
-      if (navigation === "outbox") {
-        variable = "from/";
-        myData = "MY OUTBOX";
-        // noMessage = "No outgoing  mail";
-      }
-      if (navigation === "trash") {
-        variable = "trashMail/";
-        myData = "MY TRASH";
-        // noMessage = "No junk mail";
-      }
-      // const userEmail = "jane.smith@gmail.com";
-      const authToken = localStorage.getItem(token);
+  const theMessageContent = async (email) => {
+    const { authToken, accessToken } = getTokensFromLocalStorage()
+    const refreshedToken = await getRefreshTokens(authToken, accessToken);
 
+    setMessageContent(email);
+    console.log(email._id);
 
-      axios
-      .get(`http://localhost:3000/massages/${variable}`, {
-      headers:{'Authorization': `Bearer ${authToken}`}
-      })
-      .then((res) => {
-        setEmails(res.data[myData]);
-      });
-    } else if(navigation === "search") {
-      if (searchResult && searchResult.length > 0) {
-        setEmails(searchResult);
-        console.log(emails);
-        
-      }
+    try {
+      const response = await axios.put(
+        ` http://localhost:3000/massages/reading/${email._id}`,
+        null,
+        {
+          headers: {
+            Authorization: ` Bearer ${refreshedToken}`,
+          },
+        }
+      );
+
+      console.log("resSSSSSSSSSSSSSSSSSSS", response);
+    } catch (error) {
+      console.error("Error while updating email status:", error);
     }
-    
-  }, [navigation, searchResult]);
-  
-  const deletion = (massagesId) => {
-    axios.delete(`http://localhost:3000/massages/` + massagesId).then((res) => {
-      if (res.data.acknowledged) {
-        setRefresh((prevRefresh) => !prevRefresh);
-      }
-    });
   };
 
+  // const [authToken, setAuthToken] = useState(localStorage.getItem('token'));
+
+  // const decoded = jwtDecode(authToken)
+  // console.log(decoded);
+
+  // if (new Date (decoded.exp * 1000)< Date.now()) {
+  // refreshTokens()
+  // }
+  // if(checkToken(authToken)){
+
+
+
+  useEffect(() => {
+
+    const { authToken, accessToken } = getTokensFromLocalStorage()
+    const getData = async () => {
+      const refreshedToken = await getRefreshTokens(authToken, accessToken);
+
+      let variable = "";
+      let myData = "MY INBOX";
+      if (navigation === "inbox" || navigation === "outbox" || navigation === "trash") {
+        console.log(navigation);
+        if (navigation === "inbox") {
+          variable = "";
+          myData = "MY INBOX";
+
+        }
+        if (navigation === "outbox") {
+          variable = "from/";
+          myData = "MY OUTBOX";
+
+        }
+        if (navigation === "trash") {
+          variable = "trashMail/";
+          myData = "MY TRASH";
+        }
+        axios
+          .get(`http://localhost:3000/massages/${variable}`,
+            {
+              headers: {
+                Authorization: `Bearer ${refreshedToken}`
+              }
+            })
+          .then((res) => {
+            console.log(res, "res");
+            setEmails(res.data[myData]);
+          });
+      }
+      else if (navigation === "search") {
+        console.log(searchResult);
+        setEmails(searchResult);
+      }
+    };
+    getData()
+  }, [navigation, searchResult, messageContent]);
+
+  const deletion = async (massagesId) => {
+    const { authToken, accessToken } = getTokensFromLocalStorage()
+
+    const refreshedToken = await getRefreshTokens(authToken, accessToken);
+    let deleted;
+    if (navigation === "inbox" || navigation === "outbox") {
+
+      if (navigation === "inbox") {
+        deleted = "del"
+      }
+      if (navigation === "outbox") {
+        deleted = "senderDelete"
+      }
+
+      axios.delete(`http://localhost:3000/massages/${deleted}/${massagesId}`, {
+        headers: {
+          Authorization: `Bearer ${refreshedToken}`
+        }
+      })
+        .then((res) => {
+          setEmails((prevEmails) => prevEmails.filter((email) => email._id !== massagesId));
+
+        }
+        ).catch(err => {
+          "Delete field"
+        })
+    }
+  };
+  const emailsCopy = [...emails]
   return (
     <div className={styles.inbox}>
-      <table>
-        <tbody>
-          {Array.isArray(emails) && emails.length > 0 ? (
-            emails.map((email) => (
-              <tr key={email._id}>
-                <td className={styles.name}>
-                  <Link to={`messageContent/${email.email}`}>{email.from}</Link>
-                </td>
-                <td className={styles.title}>
-                  <Link to={`messageContent/${email.email}`}>
+      {!messageContent && (
+        <table>
+          <tbody>
+            {Array.isArray(emails) && emails.length > 0 ? (
+              emailsCopy.reverse().map((email) => (
+                <tr key={email._id}>
+                  <td
+                    className={styles.name}
+                    onClick={() => theMessageContent(email)}
+                  >
+                    {email.from}
+                  </td>
+                  <td
+                    className={styles.title}
+                    onClick={() => theMessageContent(email)}
+                  >
                     {email.title}
-                  </Link>
-                </td>
-                <td
-                  className={styles.trash}
-                  onClick={() => deletion(email._id)}
-                >
-                  {<BsTrash3 />}
-                </td>
+                  </td>
+                  <td
+                    className={styles.trash}
+                    onClick={() => deletion(email._id)}
+                  >
+                    {<BsTrash3 />}
+                  </td>
+                  <td className={styles.isRead}>
+                    {email.status[0].isRead && <FcApproval />}
+                    {!email.status[0].isRead && <MdMessage />}
+                  </td>
 
-                <td className={styles.date}>
-                  <Link to={`messageContent/${email.email}`}>
+                  <td
+                    className={styles.date}
+                    onClick={() => theMessageContent(email)}
+                  >
                     {new Date(email.createDate).toLocaleDateString()}
-                  </Link>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td>
+                  {searchResult && searchResult.length > 0
+                    ? "no search result "
+                    : "no inbox to show"}
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td>
-                {/* {noMessage} */}
-                {/* {searchResult && searchResult.length > 0 ? "no search result " : 'no inbox'} */}
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      )}
+      {messageContent && (
+        <MessageContent
+          messageContent={messageContent}
+          setMessageContent={setMessageContent}
+        />
+      )}
     </div>
   );
 }
+

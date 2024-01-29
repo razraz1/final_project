@@ -9,13 +9,13 @@ async function getAllMyInboxEmail(email) {
             $elemMatch: { to: email, active: true }
         }
     })
-    if (!myEmailHistory) throw "No massage"
+    // if (!myEmailHistory) throw "No massage"
     return { "MY INBOX": myEmailHistory }
 }
 //OUTBOX
 async function getAllMyOutboxEmail(email) {
     const myEmailHistory = await massageController.read({ from: email, fromIsActive: true })
-    if (!myEmailHistory || myEmailHistory.length === 0) throw "No out massage"
+    // if (!myEmailHistory || myEmailHistory.length === 0) throw "No out massage"
     return { "MY OUTBOX": myEmailHistory }
 }
 

@@ -49,6 +49,7 @@
     width: 10%;
     font-size: 1.5rem;
     padding-bottom: 28px;
+  
 
 }
 .newEmail .to {
@@ -80,4 +81,8 @@
     border-bottom-left-radius: 15px;
     font-weight: bold;
     font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+}
+.newEmail button:hover {
+background-color: blueviolet;
 }
